@@ -1,4 +1,3 @@
-
 # p_solved.py
 # Implementacao do Jogo do Moinho (3x3) com TADs e barreiras de abstracao respeitadas.
 # ATENCAO: ASCII apenas, sem modulos externos.
