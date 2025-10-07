@@ -114,7 +114,6 @@ _ADJ = {
     'c3': ('b3', 'c2', 'b2'),
 }
 
-
 def obter_posicoes_adjacentes(p):
     """Alto nivel: tuplo com as posicoes adjacentes a p (ordem de leitura)."""
     if not eh_posicao(p):
@@ -584,3 +583,4 @@ def moinho(jogador, nivel):
     g = obter_ganhador(t)
 
     return peca_para_str(g)
+
