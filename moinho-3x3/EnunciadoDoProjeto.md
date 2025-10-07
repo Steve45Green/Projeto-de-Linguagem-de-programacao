@@ -1,5 +1,5 @@
 Projeto
-Jo go do M o inho
+Jogo do Monho
 
 Neste projeto irão desenvolver as funções de forma a implementar um programa em Python
 que permita a um jogador humano jogar o Jogo do Moinho contra o computador.
@@ -633,4 +633,5 @@ respeita ao estilo de programação.
 A atitude “vou pôr agora o programa a correr de qualquer maneira e depois preocupo-
 me com o estilo” é totalmente errada.
 Quando o programa gerar um erro, preocupem-se em descobrir qual a causa do erro.
+
 As “marteladas” no código têm o efeito de distorcer cada vez mais o código.
