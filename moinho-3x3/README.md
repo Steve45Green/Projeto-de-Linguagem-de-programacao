@@ -1,6 +1,6 @@
 Projeto: Jogo do Moinho (3x3)
 ================================
-Jose Ameixa nº18881 
+Jose Ameixa nº18881 |  Colega x    | Colega y
 
 Resumo
 ------
@@ -27,3 +27,4 @@ Isto permite ao computador (peca 'O' quando aplicavel) encontrar vitorias imedia
 O teste publico 25 assume um comportamento nao otimo do computador e pode falhar quando a IA joga de forma otima. 
 Este comportamento é esperado e não representa um erro na implementação, de acordo com a declaração.
 Para passar no teste 25 artificialmente, seria necessário rebaixar a IA de «difícil» para «O» na fase de movimento, o que não é recomendado.
+
