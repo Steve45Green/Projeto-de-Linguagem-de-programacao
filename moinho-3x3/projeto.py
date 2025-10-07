@@ -385,7 +385,7 @@ def _encontre_jogada_bloqueio_colocacao(t, j):
     o = 'O' if j == 'X' else 'X'
     return _encontre_jogada_vitoria_colocacao(t, o)
 
-# --- IA: Colocacao ---------------------------------------------------------
+# --- AI: Colocacao ---------------------------------------------------------
 def _auto_colocacao(t, j):
     """Heuristica: vitoria -> bloqueio -> centro -> cantos -> laterais.
     Devolve um tuplo com uma unica posicao (p,)."""
@@ -583,4 +583,5 @@ def moinho(jogador, nivel):
     g = obter_ganhador(t)
 
     return peca_para_str(g)
+
 
