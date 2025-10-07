@@ -362,7 +362,7 @@ def obter_movimento_manual(t, j):
     raise ValueError(ERR_MANUAL)
 
 # -----------------------------------------------------------------------------
-# obter_movimento_auto (IA)
+# obter_movimento_auto (AI)
 # -----------------------------------------------------------------------------
 def _posicoes_cantos():
     """Interna: posicoes de canto."""
@@ -582,4 +582,5 @@ def moinho(jogador, nivel):
             print(tabuleiro_para_str(t))
         turno = 'O' if turno == 'X' else 'X'
     g = obter_ganhador(t)
+
     return peca_para_str(g)
