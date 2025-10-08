@@ -14,7 +14,7 @@ Execução
 - Jogo interativo:
   python run.py
 
-Niveis de IA 
+Niveis de AI
 ---------------------------------
 - facil: Primeira jogada valida por ordem de leitura (origem e destino)
 - normal: Escolhe uma vitoria imediata; se nao houver, comporta-se como "facil"
@@ -27,4 +27,5 @@ Isto permite ao computador (peca 'O' quando aplicavel) encontrar vitorias imedia
 O teste publico 25 assume um comportamento nao otimo do computador e pode falhar quando a IA joga de forma otima. 
 Este comportamento é esperado e não representa um erro na implementação, de acordo com a declaração.
 Para passar no teste 25 artificialmente, seria necessário rebaixar a IA de «difícil» para «O» na fase de movimento, o que não é recomendado.
+
 
