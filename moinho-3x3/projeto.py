@@ -1,7 +1,7 @@
 # -*- coding: ascii -*-
 """
 Projeto: Jogo do Moinho (variante 3x3, 3 pecas por jogador)
-Autor: <Jose Ameixa n-18881>
+Autor: <Jose Ameixa n-18881 Diogo Vaz n-XXXXXX Pedro Duarte n-XXXXXXX>
 Descricao (ASCII):
  - Vence quem alinhar 3 pecas na HORIZONTAL ou VERTICAL (diagonais NAO contam).
  - Centro ('b2') tem ligacoes tambem diagonais aos quatro cantos.
@@ -50,7 +50,7 @@ HEADER = '   a   b   c'
 CONN1  = '   | \\ | / |'
 CONN2  = '   | / | \\ |'
 
-# Linhas vencedoras (horizontais e verticais) em indices (linha,coluna)
+# Linhas vencedoras (horizontais e verticais) em indices (linha, coluna)
 WIN_LINES = (
     ((0,0), (0,1), (0,2)),
     ((1,0), (1,1), (1,2)),
@@ -170,7 +170,7 @@ def _idx_from_pos(p):
     return r, c
 
 def obter_peca(t, p):
-    """Seletor: devolve peca na posicao p (' ' se livre)."""
+    """Seletor: devolve peca na posicao p (' 'se livre)."""
     r, c = _idx_from_pos(p)
     return t[r][c]
 
@@ -235,7 +235,7 @@ def eh_tabuleiro(arg):
     return True
 
 def eh_posicao_livre(t, p):
-    """Reconhecedor: True se posicao p esta livre."""
+    """Reconhecedor: True se posicao "p" esta livre."""
     return obter_peca(t, p) == ' '
 
 def tabuleiros_iguais(t1, t2):
@@ -307,11 +307,11 @@ def _adjacentes_livres(t, p):
 
 def _todos_movimentos(t, j):
     """
-    Interna: gera todas as jogadas (src,dst) validas de movimento para j.
+    Interna: gera todas as jogadas (src, dst) validas de movimento para j.
     - Ordem dos resultados: por ordem de leitura (primeira peca possivel,
       depois primeiro destino adjacente livre).
     - Regra de "passar": so e permitido quando NAO existe qualquer movimento
-      real, caso em que devolve (p,p) usando a primeira peca por ordem de leitura.
+      real, caso em que devolve (p, p) usando a primeira peca por ordem de leitura.
     """
     jogadas = []
     # Ordem de leitura garantida: iteramos pelas posicoes do jogador em leitura
@@ -387,7 +387,7 @@ def _encontre_jogada_bloqueio_colocacao(t, j):
 
 # --- AI: Colocacao ---------------------------------------------------------
 def _auto_colocacao(t, j):
-    """Heuristica: vitoria -> bloqueio -> centro -> cantos -> laterais.
+    """ vitoria -> bloqueio -> centro -> cantos -> laterais.
     Devolve um tuplo com uma unica posicao (p,)."""
     # 1) Vitoria imediata
     p = _encontre_jogada_vitoria_colocacao(t, j)
@@ -500,7 +500,7 @@ def obter_movimento_auto(t, j, nivel):
 
     # Fase de movimento
     if nivel == 'facil':
-        # Primeiro movimento possivel por ordem de leitura; se bloqueado, devolve (p,p).
+        """ Primeiro movimento possivel por ordem de leitura; se bloqueado, devolve (p,p)."""
         for p in obter_posicoes_jogador(t, j):
             for q in obter_posicoes_adjacentes(p):
                 if eh_posicao_livre(t, q):
@@ -528,7 +528,7 @@ def obter_movimento_auto(t, j, nivel):
     # dificil
     score, mv = _minimax(t, j, max_depth=5)
     if mv is None:
-        # fallback: algum movimento legal
+        # fallback: algum movimento possivel
         for p in obter_posicoes_jogador(t, j):
             for q in obter_posicoes_adjacentes(p):
                 if eh_posicao_livre(t, q):
@@ -558,8 +558,8 @@ def moinho(jogador, nivel):
     Se invalidos, levanta ValueError('moinho: argumentos invalidos').
     Mensagens:
     - 'Bem-vindo ao JOGO DO MOINHO. Nivel de dificuldade <nivel>.'
-    - 'Turno do computador (<nivel>):'
-    Termina quando ha ganhador; devolve '[X]' ou '[O]'.
+    - 'Turno do computador (<nivel>) :.'
+     Termina quando ha vencedor; devolve '[X]' ou '[O]'.
     """
     if not (isinstance(jogador, str) and jogador in ('[X]', '[O]') and isinstance(nivel, str) and nivel in ('facil', 'normal', 'dificil')):
         raise ValueError(ERR_MOINHO)
@@ -581,7 +581,4 @@ def moinho(jogador, nivel):
             print(tabuleiro_para_str(t))
         turno = 'O' if turno == 'X' else 'X'
     g = obter_ganhador(t)
-
     return peca_para_str(g)
-
-
