@@ -32,6 +32,10 @@ Mensagens obrigatorias:
 - Turno do computador:
   'Turno do computador (<nivel>):'
 """
+# -----------------------------------------------------------------------------
+# Variaveis de escolha de movimento
+# -----------------------------------------------------------------------------
+turno_manual = 0
 
 # -----------------------------------------------------------------------------
 # Constantes
@@ -328,6 +332,7 @@ def _todos_movimentos(t, j):
 # obter_movimento_manual
 # -----------------------------------------------------------------------------
 def obter_movimento_manual(t, j):
+    global turno_manual
     """
     Le a escolha do utilizador (via input) e valida:
     - Fase colocacao: 'cl' de posicao livre -> devolve (p,)
@@ -338,19 +343,22 @@ def obter_movimento_manual(t, j):
     Se invalido, levanta ValueError('obter_movimento_manual: escolha invalida')
     """
     # Fase de colocacao
-    turno = 0
-    if turno < 3:
+    if turno_manual < 3:
         if _fase_colocacao(t):
-            turno+=1
+            turno_manual += 1
             s = input('Turno do jogador. Escolha uma posicao: ').strip()
             if len(s) == 2 and s[0] in COLS and s[1] in ROWS:
                 p = cria_posicao(s[0], s[1])
                 if eh_posicao_livre(t, p):
                     return (p,)
             raise ValueError(ERR_MANUAL)
-
     # Fase de movimento
     s = input('Turno do jogador. Escolha um movimento: ').strip()
+    print("DEBUG s=", repr(s))
+    print("DEBUG COLS=", COLS, "ROWS=", ROWS)
+    print("DEBUG checks:", s[0] in COLS, s[1] in ROWS, s[2] in COLS, s[3] in ROWS)
+    print("DEBUG row char types:", type(next(iter(ROWS))), s[1], s[3])
+    print("DEBUG '1' in ROWS? ->", ('1' in ROWS))
     if len(s) == 4 and s[0] in COLS and s[1] in ROWS and s[2] in COLS and s[3] in ROWS:
         p_origem = cria_posicao(s[0], s[1])
         p_destino = cria_posicao(s[2], s[3])
