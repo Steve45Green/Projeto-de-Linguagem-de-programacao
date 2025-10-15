@@ -338,13 +338,16 @@ def obter_movimento_manual(t, j):
     Se invalido, levanta ValueError('obter_movimento_manual: escolha invalida')
     """
     # Fase de colocacao
-    if _fase_colocacao(t):
-        s = input('Turno do jogador. Escolha uma posicao: ').strip()
-        if len(s) == 2 and s[0] in COLS and s[1] in ROWS:
-            p = cria_posicao(s[0], s[1])
-            if eh_posicao_livre(t, p):
-                return (p,)
-        raise ValueError(ERR_MANUAL)
+    turno = 0
+    if turno < 3:
+        if _fase_colocacao(t):
+            turno+=1
+            s = input('Turno do jogador. Escolha uma posicao: ').strip()
+            if len(s) == 2 and s[0] in COLS and s[1] in ROWS:
+                p = cria_posicao(s[0], s[1])
+                if eh_posicao_livre(t, p):
+                    return (p,)
+            raise ValueError(ERR_MANUAL)
 
     # Fase de movimento
     s = input('Turno do jogador. Escolha um movimento: ').strip()

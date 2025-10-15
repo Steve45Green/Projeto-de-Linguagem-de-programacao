@@ -1,3 +1,5 @@
+from tokenize import String
+
 from p_solved import *
 
 # imports para simular a stream de input/output
