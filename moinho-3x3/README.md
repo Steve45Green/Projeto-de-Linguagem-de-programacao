@@ -22,7 +22,8 @@ Niveis de AI
 
 Nota sobre o teste publico 25
 -----------------------------
- 5a jogada do jogador é a1b1, mas o b1 ja tem uma jogada feita por AI (NOTA IMPORTANTE: Temos que alterar a função para def_auto_colocacao)
+ 5a jogada do jogador é a1b1, mas o b1 ja tem uma jogada feita por computador (NOTA IMPORTANTE: Temos que alterar a seguinte função def_auto_colocacao onde ocorre colocao automatica das "peças" o que temos que fazer é alterar a jogada do computador em vez de ser "b1")
+
 
 
 
