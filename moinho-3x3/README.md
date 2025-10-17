@@ -22,10 +22,6 @@ Niveis de AI
 
 Nota sobre o teste publico 25
 -----------------------------
-Em conformidade estrita com o enunciado, o nivel "dificil" usa minimax profundidade 5. 
-Isto permite ao computador (peca 'O' quando aplicavel) encontrar vitorias imediatas na fase de movimento. 
-O teste publico 25 assume um comportamento nao otimo do computador e pode falhar quando a IA joga de forma otima. 
-Este comportamento é esperado e não representa um erro na implementação, de acordo com a declaração.
-Para passar no teste 25 artificialmente, seria necessário rebaixar a IA de «difícil» para «O» na fase de movimento, o que não é recomendado.
+ 5a jogada do jogador é a1b1, mas o b1 ja tem uma jogada feita por AI (NOTA IMPORTANTE: Temos que alterar a função para def_auto_colocacao)
 
 
