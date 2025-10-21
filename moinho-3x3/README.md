@@ -1,6 +1,6 @@
 Projeto: Jogo do Moinho (3x3)
 ================================
-Jose Ameixa nº18881 | Diogo Vaz | Pedro duarte
+Jose Ameixa n-18881 Diogo Vaz n-21132 Pedro Duarte n-21190
 
 Resumo
 ------
@@ -23,6 +23,7 @@ Niveis de AI
 Nota sobre o teste publico 25
 -----------------------------
  5a jogada do jogador é a1b1, mas o b1 ja tem uma jogada feita por computador (NOTA IMPORTANTE: Temos que alterar a seguinte função def_auto_colocacao onde ocorre colocao automatica das "peças" o que temos que fazer é alterar a jogada do computador em vez de ser "b1")
+
 
 
 
