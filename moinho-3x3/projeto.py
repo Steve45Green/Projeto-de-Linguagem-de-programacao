@@ -175,21 +175,26 @@ def obter_peca(t, p):
     return t[r][c]
 
 def obter_vetor(t, s):
-    """Seletor: tuplo com as pecas da linha (s em {'1','2','3'}) ou coluna (s em {'a','b','c'})."""
+    """Seletor: tuplo com as pecas da linha ('1','2','3') ou coluna ('a','b','c')."""
     if s in COLS:
         c = COLS.index(s)
         return tuple(t[r][c] for r in range(3))
-    elif s in ROWS:
+    if s in ROWS:
         r = ROWS.index(s)
         return tuple(t[r][c] for c in range(3))
-    else:
-        # Mantem comportamento implicito de seletor (sem validacao obrigatoria).
-        # A linha seguinte preserva a semantica anterior (pode receber uma mensagem com ValueError).
-        r = ROWS.index(s)
-        return tuple(t[r][c] for c in range(3))
+    raise ValueError("obter_vetor: seletor invalido (use 'a'..'c' ou '1'..'3')")
 
 def coloca_peca(t, j, p):
     """Modificador: coloca peca j em p (destrutivo)."""
+    # Validar peça e posição
+    if not eh_peca(j) or j == ' ':
+        raise ValueError("coloca_peca: peca invalida")
+    if not eh_posicao(p):
+        raise ValueError("coloca_peca: posicao invalida")
+    # A casa tem de estar livre
+    if obter_peca(t, p) != ' ':
+        raise ValueError("coloca_peca: posicao ocupada")
+
     r, c = _idx_from_pos(p)
     t[r][c] = j
     return t
@@ -202,10 +207,28 @@ def remove_peca(t, p):
 
 def move_peca(t, p_origem, p_destino):
     """Modificador: move peca de p_origem para p_destino."""
+    # Validar posições
+    if not (eh_posicao(p_origem) and eh_posicao(p_destino)):
+        raise ValueError("move_peca: posicao invalida")
+
+    # Tem de haver peça na origem
+    if obter_peca(t, p_origem) == ' ':
+        raise ValueError("move_peca: origem vazia")
+
+    # O destino tem de estar livre
+    if obter_peca(t, p_destino) != ' ':
+        raise ValueError("move_peca: destino ocupado")
+
+    # Regra da adjacência (fase 2 do jogo)
+    if p_destino not in obter_posicoes_adjacentes(p_origem):
+        raise ValueError("move_peca: destino nao adjacente")
+
+    # Executar o movimento
     j = obter_peca(t, p_origem)
     remove_peca(t, p_origem)
     coloca_peca(t, j, p_destino)
     return t
+
 
 def _has_winner(t, j):
     """Interna: True se j tem 3 em linha horizontal ou vertical (usa WIN_LINES). """
