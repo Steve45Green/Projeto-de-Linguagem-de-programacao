@@ -19,7 +19,7 @@ TADs e funcoes publicas:
   eh_posicao_livre, tabuleiros_iguais, tabuleiro_para_str,
   tuplo_para_tabuleiro, obter_ganhador, obter_posicoes_livres,
   obter_posicoes_jogador
-- Jogo: obter_movimento_manual (I/O), obter_movimento_auto (IA), moinho (principal)
+- Jogo: obter_movimento_manual (I/O), obter_movimento_auto (AI), moinho (principal)
 
 Mensagens obrigatorias:
 - Erros:
@@ -32,11 +32,13 @@ Mensagens obrigatorias:
 - Turno do computador:
   'Turno do computador (<nivel>):'
 """
+from typing import Literal  # <<< adicionado (alteracao minima)
 
 # -----------------------------------------------------------------------------
 # Constantes
 # -----------------------------------------------------------------------------
 COLS = ('a', 'b', 'c')
+
 ROWS = ('1', '2', '3')
 
 ERR_POS = 'cria_posicao: argumentos invalidos'
@@ -44,7 +46,7 @@ ERR_PIECE = 'cria_peca: argumento invalido'
 ERR_MANUAL = 'obter_movimento_manual: escolha invalida'
 ERR_MOINHO = 'moinho: argumentos invalidos'
 
-# ---------------- Desenho do tabuleiro (ASCII) ----------------
+# ---------------- Desenho do tabuleiro (ASCII) ------------------------------
 
 HEADER = '   a   b   c'
 CONN1  = '   | \\ | / |'
@@ -115,12 +117,10 @@ _ADJ = {
 }
 
 def obter_posicoes_adjacentes(p):
-    """Alto nivel: tuplo com as posicoes adjacentes a p (ordem de leitura)."""
+    """Tuplo com as posicoes adjacentes a p (ordem de leitura)."""
     if not eh_posicao(p):
         raise ValueError('obter_posicoes_adjacentes: posicao invalida')
-    key = posicao_para_str(p)
-    # Mantem determinismo: filtra por ordem de leitura sem sets na saida
-    viz = set(_ADJ[key])
+    viz = set(_ADJ[posicao_para_str(p)])
     return tuple(pp for pp in _iter_pos_em_leitura() if posicao_para_str(pp) in viz)
 
 # -----------------------------------------------------------------------------
@@ -179,7 +179,12 @@ def obter_vetor(t, s):
     if s in COLS:
         c = COLS.index(s)
         return tuple(t[r][c] for r in range(3))
+    elif s in ROWS:
+        r = ROWS.index(s)
+        return tuple(t[r][c] for c in range(3))
     else:
+        # Mantem comportamento implicito de seletor (sem validacao obrigatoria).
+        # A linha seguinte preserva a semantica anterior (pode receber uma mensagem com ValueError).
         r = ROWS.index(s)
         return tuple(t[r][c] for c in range(3))
 
@@ -203,7 +208,7 @@ def move_peca(t, p_origem, p_destino):
     return t
 
 def _has_winner(t, j):
-    """Interna: True se j tem 3 em linha horizontal ou vertical (usa WIN_LINES)."""
+    """Interna: True se j tem 3 em linha horizontal ou vertical (usa WIN_LINES). """
     for (a, b, c) in WIN_LINES:
         if t[a[0]][a[1]] == j and t[b[0]][b[1]] == j and t[c[0]][c[1]] == j:
             return True
@@ -255,7 +260,13 @@ def tuplo_para_tabuleiro(tp):
     for r in range(3):
         for c in range(3):
             val = tp[r][c]
-            j = 'X' if val == 1 else ('O' if val == -1 else ' ')
+            # ALTERACAO MINIMA: tipar 'j' como literal e usar if/elif/else (mesma logica)
+            if val == 1:
+                j: Literal['X','O',' '] = 'X'
+            elif val == -1:
+                j = 'O'
+            else:
+                j = ' '
             t[r][c] = j
     return t
 
@@ -327,15 +338,28 @@ def _todos_movimentos(t, j):
 # -----------------------------------------------------------------------------
 # obter_movimento_manual
 # -----------------------------------------------------------------------------
+
 def obter_movimento_manual(t, j):
-    """
-    Le a escolha do utilizador (via input) e valida:
-    - Fase colocacao: 'cl' de posicao livre -> devolve (p,)
-    - Fase movimento: 'c1l1c2l2' -> (origem, destino)
-      * destino deve ser adjacente e livre
-      * se origem==destino, interpreta como 'passar' APENAS se NAO HOUVER
-        QUALQUER movimento possivel (todas as pecas do jogador bloqueadas)
-    Se invalido, levanta ValueError('obter_movimento_manual: escolha invalida')
+    """Funcao auxiliar (I/O) que recolhe e valida a escolha do jogador humano.
+
+    Fase de colocacao:
+        - Entrada: 'cl' (ex.: 'a1'); posicao tem de estar livre.
+        - Saida:   tuplo (p,)
+
+    Fase de movimento:
+        - Entrada: 'c1l1c2l2' (ex.: 'b1a1'); origem com peca propria;
+                   destino adjacente e livre.
+        - Saida:   tuplo (origem, destino)
+        - Regra 'passar': permitido apenas se NAO existir qualquer movimento
+          real possivel; nesse caso aceita (p,p) com p de peca propria.
+
+    Mensagens obrigatorias:
+        - 'Turno do jogador. Escolha uma posicao: '  (colocacao)
+        - 'Turno do jogador. Escolha um movimento: ' (movimento)
+
+    Erros:
+        - ValueError('obter_movimento_manual: escolha invalida') se a entrada
+          nao respeitar as regras acima.
     """
     # Fase de colocacao
     if _fase_colocacao(t):
@@ -384,11 +408,12 @@ def _encontre_jogada_bloqueio_colocacao(t, j):
     """Devolve posicao que bloqueia vitoria imediata do adversario, se existir."""
     o = 'O' if j == 'X' else 'X'
     return _encontre_jogada_vitoria_colocacao(t, o)
-
-# --- AI: Colocacao ---------------------------------------------------------
+# -----------------------------------------------------------------------------
+# AI: Colocacao
+# -----------------------------------------------------------------------------
 def _auto_colocacao(t, j):
     """ vitoria -> bloqueio -> centro -> cantos -> laterais.
-    Devolve um tuplo com uma unica posicao (p,)."""
+    Devolve um tuplo com uma unica posicao (p, )."""
     # 1) Vitoria imediata
     p = _encontre_jogada_vitoria_colocacao(t, j)
     if p:
@@ -412,14 +437,24 @@ def _auto_colocacao(t, j):
     # Fallback
     livres = obter_posicoes_livres(t)
     return (livres[0],) if livres else (cria_posicao('a','1'),)
-
-# --- Minimax (fase de movimento) ---------------------------------------
+# -----------------------------------------------------------------------------
+# Minimax (fase de movimento)
+# -----------------------------------------------------------------------------
 def _minimax(t, jogador_atual, max_depth=5):
-    """Minimax com poda alpha-beta sobre movimentos gerados por ordem de leitura.
-    Avaliacao: +1 ('X' vence), -1 ('O' vence), 0 caso contrario. X maximiza; O minimiza.
-    Desempates: mantem determinismo escolhendo o primeiro melhor de acordo
-    com a ordem dos movimentos gerados. Profundidade maxima por omissao: 5."""
+    """Minimax com poda alpha-beta, usando a ordem de leitura para gerar movimentos.
 
+    Avaliacao (simples e conforme enunciado):
+        +1 se 'X' vence; -1 se 'O' vence; 0 caso contrario.
+    Convencao:
+        - 'X' maximiza; 'O' minimiza.
+    Determinismo:
+        - Desempates resolvidos mantendo a primeira melhor jogada pela
+          ordem de geracao dos movimentos (ordem de leitura).
+    Args:
+        t (tabuleiro): tabuleiro atual.
+        jogador_atual (peca): 'X' ou 'O'.
+        max_depth (int): profundidade maxima da pesquisa (padrao 5).
+    """
     def aval(tb):
         g = obter_ganhador(tb)
         if g == 'X':
@@ -432,8 +467,9 @@ def _minimax(t, jogador_atual, max_depth=5):
         return 'O' if j == 'X' else 'X'
 
     def ordenar_movimentos(tb, j, movs):
-        # Heuristica de ordenacao: prioriza movimentos vencedores imediatos
-        # do jogador atual, mantendo o restante pela ordem de geracao.
+        # Heuristica/Determinismo:
+        # 1) Prioriza movimentos que vencem imediatamente para o jogador atual;
+        # 2) Mantem os restantes pela ordem de geracao (ordem de leitura), garantindo resultados deterministas.
         ganhos, restantes = [], []
         for (po, pd) in movs:
             tb2 = cria_copia_tabuleiro(tb)
@@ -449,10 +485,12 @@ def _minimax(t, jogador_atual, max_depth=5):
         g = obter_ganhador(tb)
         if g != ' ' or depth == 0:
             return aval(tb), None
+
         movs = _todos_movimentos(tb, j)
         if not movs:
             return aval(tb), None
         movs = ordenar_movimentos(tb, j, movs)
+
         if j == 'X':  # maximiza
             best_score, best_move = -10, None
             for (po, pd) in movs:
@@ -483,58 +521,63 @@ def _minimax(t, jogador_atual, max_depth=5):
             return best_score, best_move
 
     return mm(t, jogador_atual, max_depth, -10, 10)
-
-# --- Movimento automatico ---------------------------------------------------
+# -----------------------------------------------------------------------------
+# --- Movimento automatico
+# -----------------------------------------------------------------------------
 def obter_movimento_auto(t, j, nivel):
-    """
-    Movimento automatico:
-    - Fase de colocacao (qualquer nivel): vitoria, bloqueio, centro, cantos, laterais.
-    - Fase de movimento:
-      * 'facil': primeiro movimento valido por ordem de leitura
-      * 'normal': vitoria imediata; senao, igual a 'facil'
-      * 'dificil': minimax(5)
+    """Escolha automatica de jogada conforme fase do jogo e nivel de dificuldade.
+
+    Colocacao (todos os niveis):
+        1) Vitoria imediata 2) Bloqueio ao adversario 3) Centro 4) Cantos 5) Laterais
+    Movimento:
+        - 'facil' : primeiro movimento valido por ordem de leitura; se bloqueado,
+                    devolve (p,p) da primeira peca do jogador.
+        - 'normal': equivalente a procurar vitoria imediata (profundidade 1);
+                    se nao existir, igual a 'facil'.
+        - 'dificil': minimax com profundidade 5.
+
+    Returns:
+        tuple[posicao] | tuple [ posicao , posicao]
     """
     # Fase de colocacao
     if _fase_colocacao(t):
         return _auto_colocacao(t, j)
-
-    # Fase de movimento
-    if nivel == 'facil':
-        """ Primeiro movimento possivel por ordem de leitura; se bloqueado, devolve (p,p)."""
+#--------------------------------------------------------
+#  Fase de movimento
+#--------------------------------------------------------
+    def _primeiro_movimento_ou_passar():
+        """Primeiro movimento valido por ordem de leitura; se nenhum existir, (p,p)."""
         for p in obter_posicoes_jogador(t, j):
             for q in obter_posicoes_adjacentes(p):
                 if eh_posicao_livre(t, q):
                     return p, q
         pj = obter_posicoes_jogador(t, j)
-        return (pj[0], pj[0]) if pj else (cria_posicao('a','1'), cria_posicao('a','1'))
+        return (pj[0], pj[0]) if pj else (cria_posicao('a', '1'), cria_posicao('a', '1'))
 
-    if nivel == 'normal':
-        # procura vitoria imediata
+    def _movimento_vitoria_imediata():
+        """Devolve (po,pd) que ganha imediatamente (1 ply), ou None se nao existir."""
         for (po, pd) in _todos_movimentos(t, j):
-            if posicoes_iguais(po, pd):
+            if posicoes_iguais(po, pd):  # passar nao e vitoria
                 continue
             t2 = cria_copia_tabuleiro(t)
             move_peca(t2, po, pd)
             if obter_ganhador(t2) == j:
                 return po, pd
-        # fallback: facil
-        for p in obter_posicoes_jogador(t, j):
-            for q in obter_posicoes_adjacentes(p):
-                if eh_posicao_livre(t, q):
-                    return p, q
-        pj = obter_posicoes_jogador(t, j)
-        return (pj[0], pj[0]) if pj else (cria_posicao('a','1'), cria_posicao('a','1'))
+        return None
+
+    if nivel == 'facil':
+        return _primeiro_movimento_ou_passar()
+
+    if nivel == 'normal':
+        mv_vitoria = _movimento_vitoria_imediata()
+        if mv_vitoria is not None:
+            return mv_vitoria
+        return _primeiro_movimento_ou_passar()
 
     # dificil
     score, mv = _minimax(t, j, max_depth=5)
     if mv is None:
-        # fallback: algum movimento possivel
-        for p in obter_posicoes_jogador(t, j):
-            for q in obter_posicoes_adjacentes(p):
-                if eh_posicao_livre(t, q):
-                    return p, q
-        pj = obter_posicoes_jogador(t, j)
-        return (pj[0], pj[0]) if pj else (cria_posicao('a','1'), cria_posicao('a','1'))
+        return _primeiro_movimento_ou_passar()
     return mv
 
 # -----------------------------------------------------------------------------
@@ -552,14 +595,21 @@ def _aplicar_movimento(t, j, mv):
     return t
 
 def moinho(jogador, nivel):
-    """
-    Funcao principal do jogo.
-    Argumentos: jogador em {'[X]','[O]'} e nivel em {'facil','normal','dificil'}.
-    Se invalidos, levanta ValueError('moinho: argumentos invalidos').
-    Mensagens:
-    - 'Bem-vindo ao JOGO DO MOINHO. Nivel de dificuldade <nivel>.'
-    - 'Turno do computador (<nivel>) :.'
-     Termina quando ha vencedor; devolve '[X]' ou '[O]'.
+    """Funcao principal: corre um jogo completo humano vs. computador.
+
+    Args:
+        jogador (str): '[X]' ou '[O]' (peca escolhida pelo humano).
+        nivel (str): 'facil' | 'normal' | 'dificil' (IA).
+
+    Efeitos:
+        - Imprime mensagens de arranque, turnos e o tabuleiro apos cada jogada.
+        - X comeca sempre; se humano for '[O]', o computador joga primeiro.
+
+    Erros:
+        - ValueError('moinho: argumentos invalidos') se args nao forem validos.
+
+    Returns:
+        str: '[X]' ou '[O]' (representacao externa da peca vencedora).
     """
     if not (isinstance(jogador, str) and jogador in ('[X]', '[O]') and isinstance(nivel, str) and nivel in ('facil', 'normal', 'dificil')):
         raise ValueError(ERR_MOINHO)
@@ -582,5 +632,3 @@ def moinho(jogador, nivel):
         turno = 'O' if turno == 'X' else 'X'
     g = obter_ganhador(t)
     return peca_para_str(g)
-
-
