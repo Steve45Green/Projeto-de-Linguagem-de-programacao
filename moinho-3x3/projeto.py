@@ -1,4 +1,3 @@
-# -*- coding: ascii -*-
 """
 Projeto: Jogo do Moinho (variante 3x3, 3 pecas por jogador)
 Autor: <Jose Ameixa n-18881 Diogo Vaz n-21132 Pedro Duarte n-21190>
@@ -815,3 +814,4 @@ def moinho(jogador, nivel):
         turno = 'O' if turno == 'X' else 'X'
     g = obter_ganhador(t)
     return peca_para_str(g)
+
