@@ -30,7 +30,7 @@ Mensagens obrigatorias:
 - Arranque:
   'Bem-vindo ao JOGO DO MOINHO. Nivel de dificuldade <nivel>.'
 - Turno do computador:
-  'Turno do computador (<nivel>):'
+  'Turno do computador (<nivel>):
 """
 from typing import Literal  # <<< adicionado (alteracao minima)
 
@@ -436,7 +436,7 @@ def _encontre_jogada_bloqueio_colocacao(t, j):
 # -----------------------------------------------------------------------------
 def _auto_colocacao(t, j):
     """ vitoria -> bloqueio -> centro -> cantos -> laterais.
-    Devolve um tuplo com uma unica posicao (p, )."""
+    Devolve um tuplo com uma unica posicao (p,)."""
     # 1) Vitoria imediata
     p = _encontre_jogada_vitoria_colocacao(t, j)
     if p:
