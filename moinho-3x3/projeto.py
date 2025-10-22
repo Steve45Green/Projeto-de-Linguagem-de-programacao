@@ -186,7 +186,7 @@ def obter_vetor(t, s):
 
 def coloca_peca(t, j, p):
     """Modificador: coloca peca j em p (destrutivo)."""
-    # Validar peça e posição
+    # Validar peca e posicao
     if not eh_peca(j) or j == ' ':
         raise ValueError("coloca_peca: peca invalida")
     if not eh_posicao(p):
@@ -207,11 +207,11 @@ def remove_peca(t, p):
 
 def move_peca(t, p_origem, p_destino):
     """Modificador: move peca de p_origem para p_destino."""
-    # Validar posições
+    # Validar posi??es
     if not (eh_posicao(p_origem) and eh_posicao(p_destino)):
         raise ValueError("move_peca: posicao invalida")
 
-    # Tem de haver peça na origem
+    # Tem de haver pe?a na origem
     if obter_peca(t, p_origem) == ' ':
         raise ValueError("move_peca: origem vazia")
 
@@ -219,7 +219,7 @@ def move_peca(t, p_origem, p_destino):
     if obter_peca(t, p_destino) != ' ':
         raise ValueError("move_peca: destino ocupado")
 
-    # Regra da adjacência (fase 2 do jogo)
+    # Regra da adjac?ncia (fase 2 do jogo)
     if p_destino not in obter_posicoes_adjacentes(p_origem):
         raise ValueError("move_peca: destino nao adjacente")
 
