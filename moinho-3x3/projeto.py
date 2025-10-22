@@ -496,6 +496,19 @@ def _minimax(t, jogador_atual, max_depth=5):
     return mm(t, jogador_atual, max_depth, -10, 10)
 
 # --- Movimento automatico ---------------------------------------------------
+def _primeiro_movimento_possivel(t, j):
+    """Devolve primeiro (origem, destino) v?lido por ordem de leitura,
+    ou (p,p) para 'passar' se n?o existir movimento, ou (a1,a1) se n?o houver pe?as."""
+    for p in obter_posicoes_jogador(t, j):
+        for q in obter_posicoes_adjacentes(p):
+            if eh_posicao_livre(t, q):
+                return p, q
+    pj = obter_posicoes_jogador(t, j)
+    if pj:
+        return pj[0], pj[0]
+    pos = cria_posicao('a', '1')
+    return pos, pos
+
 def obter_movimento_auto(t, j, nivel):
     """
     Movimento automatico:
@@ -509,18 +522,12 @@ def obter_movimento_auto(t, j, nivel):
     if _fase_colocacao(t):
         return _auto_colocacao(t, j)
 
-    # Fase de movimento
+    # Facil: primeiro movimento possivel (ou passar)
     if nivel == 'facil':
-        """ Primeiro movimento possivel por ordem de leitura; se bloqueado, devolve (p,p)."""
-        for p in obter_posicoes_jogador(t, j):
-            for q in obter_posicoes_adjacentes(p):
-                if eh_posicao_livre(t, q):
-                    return p, q
-        pj = obter_posicoes_jogador(t, j)
-        return (pj[0], pj[0]) if pj else (cria_posicao('a','1'), cria_posicao('a','1'))
+        return _primeiro_movimento_possivel(t, j)
 
+    # Normal: procura vitoria imediata; se nao, fallback para facil
     if nivel == 'normal':
-        # procura vitoria imediata
         for (po, pd) in _todos_movimentos(t, j):
             if posicoes_iguais(po, pd):
                 continue
@@ -528,25 +535,14 @@ def obter_movimento_auto(t, j, nivel):
             move_peca(t2, po, pd)
             if obter_ganhador(t2) == j:
                 return po, pd
-        # fallback: facil
-        for p in obter_posicoes_jogador(t, j):
-            for q in obter_posicoes_adjacentes(p):
-                if eh_posicao_livre(t, q):
-                    return p, q
-        pj = obter_posicoes_jogador(t, j)
-        return (pj[0], pj[0]) if pj else (cria_posicao('a','1'), cria_posicao('a','1'))
+        return _primeiro_movimento_possivel(t, j)
 
-    # dificil
+    # Dificil: minimax e fallback para primeiro movimento possivel
     score, mv = _minimax(t, j, max_depth=5)
     if mv is None:
-        # fallback: algum movimento possivel
-        for p in obter_posicoes_jogador(t, j):
-            for q in obter_posicoes_adjacentes(p):
-                if eh_posicao_livre(t, q):
-                    return p, q
-        pj = obter_posicoes_jogador(t, j)
-        return (pj[0], pj[0]) if pj else (cria_posicao('a','1'), cria_posicao('a','1'))
+        return _primeiro_movimento_possivel(t, j)
     return mv
+
 
 # -----------------------------------------------------------------------------
 # Funcao principal
