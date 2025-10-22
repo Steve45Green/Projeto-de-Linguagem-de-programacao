@@ -66,7 +66,22 @@ WIN_LINES = (
 # TAD posicao
 # -----------------------------------------------------------------------------
 def cria_posicao(c, l):
-    """Construtor: recebe c em {'a','b','c'} e l em {'1','2','3'}."""
+    """
+    Construtor do TAD posicao.
+
+    Pre-condicoes:
+    - c: str em {'a','b','c'}.
+    - l: str em {'1','2','3'}.
+
+    Pos-condicoes:
+    - Retorna um TAD posicao (tuplo (c,l)).
+    - Lanca ValueError('cria_posicao: argumentos invalidos') se c/l forem invalidos.
+
+    Exemplos:
+    cria_posicao('a','1')  # ('a','1')
+    cria_posicao('d','1')  # ValueError
+
+    """
     if not isinstance(c, str) or not isinstance(l, str):
         raise ValueError(ERR_POS)
     if c not in COLS or l not in ROWS:
@@ -127,7 +142,20 @@ def obter_posicoes_adjacentes(p):
 # TAD peca
 # -----------------------------------------------------------------------------
 def cria_peca(s):
-    """Construtor: 'X', 'O' ou ' ' (livre)."""
+    """
+    Construtor do TAD peca.
+
+    Pre-condicoes:
+    - s: str em {'X','O',' '}. (Espaco representa peca livre.)
+
+    Pos-condicoes:
+    - Retorna 'X', 'O' ou ' '.
+    - Lanca ValueError('cria_peca: argumento invalido') se s nao pertencer ao conjunto.
+
+    Exemplos:
+    cria_peca('X')  # 'X'
+    cria_peca('x')  # ValueError
+    """
     if not (isinstance(s, str) and len(s) == 1 and s in ('X', 'O', ' ')):
         raise ValueError(ERR_PIECE)
     return s
@@ -156,7 +184,20 @@ def peca_para_inteiro(j):
 # TAD tabuleiro
 # -----------------------------------------------------------------------------
 def cria_tabuleiro():
-    """Construtor: devolve tabuleiro 3x3 vazio (' ')."""
+    """
+    Construtor do TAD tabuleiro 3x3.
+
+    Pre-condicoes:
+    - Nenhuma.
+
+    Pos-condicoes:
+    - Retorna lista 3x3 com todas as posicoes livres (' ').
+    - eh_tabuleiro(retornado) == True.
+
+    Exemplos:
+    t = cria_tabuleiro()
+    eh_tabuleiro(t)  # True
+"""
     return [[cria_peca(' ') for _ in COLS] for _ in ROWS]
 
 def cria_copia_tabuleiro(t):
@@ -206,12 +247,34 @@ def remove_peca(t, p):
     return t
 
 def move_peca(t, p_origem, p_destino):
-    """Modificador: move peca de p_origem para p_destino."""
-    # Validar posi??es
+    """
+    Modificador: move peca de p_origem para p_destino.
+
+    Pre-condicoes:
+    - t: tabuleiro valido.
+    - p_origem, p_destino: posicoes validas (TAD posicao).
+    - Em t, p_origem tem uma peca ('X' ou 'O') e p_destino esta livre (' ').
+    - p_destino e adjacente a p_origem (conforme obter_posicoes_adjacentes).
+
+    Pos-condicoes:
+    - Modifica destrutivamente t, movendo a peca de p_origem para p_destino.
+    - Retorna o proprio tabuleiro t.
+
+    Erros:
+    - ValueError('move_peca: posicao invalida')     se p_origem/p_destino nao forem posicoes validas.
+    - ValueError('move_peca: origem vazia')         se p_origem nao tiver peca.
+    - ValueError('move_peca: destino ocupado')      se p_destino nao estiver livre.
+    - ValueError('move_peca: destino nao adjacente') se p_destino nao for adjacente.
+
+    Exemplos:
+    Com 'X' em a1 e b1 livre, e adjacentes:
+    move_peca(t, cria_posicao('a','1'), cria_posicao('b','1'))
+"""
+    # Validar posicoes
     if not (eh_posicao(p_origem) and eh_posicao(p_destino)):
         raise ValueError("move_peca: posicao invalida")
 
-    # Tem de haver pe?a na origem
+    # Tem de haver peca na origem
     if obter_peca(t, p_origem) == ' ':
         raise ValueError("move_peca: origem vazia")
 
@@ -271,14 +334,38 @@ def tabuleiros_iguais(t1, t2):
     return eh_tabuleiro(t1) and eh_tabuleiro(t2) and all(t1[r][c] == t2[r][c] for r in range(3) for c in range(3))
 
 def tabuleiro_para_str(t):
-    """Transformador: devolve a string do tabuleiro no formato esperado."""
+    """
+    Transformador: devolve a representacao ASCII do tabuleiro (formato do enunciado).
+
+    Pre-condicoes:
+    - t: tabuleiro valido.
+
+    Pos-condicoes:
+    - Retorna uma string multi-linha, com cabecalho '   a   b   c' e linhas 1..3,
+      conectores graficos e pecas em formato '[X]', '[O]', '[ ]'.
+
+    Exemplos:
+    print(tabuleiro_para_str(cria_tabuleiro()))
+"""
     def row(r):
         # Ex.: "1 [ ]-[ ]-[ ]"
         return f"{ROWS[r]} " + '-'.join(peca_para_str(t[r][c]) for c in range(3))
     return '\n'.join([HEADER, row(0), CONN1, row(1), CONN2, row(2)])
 
 def tuplo_para_tabuleiro(tp):
-    """Transformador: (1,-1,0) -> ('X','O',' ')."""
+    """
+    Transformador: converte um tuplo de inteiros (1,-1,0) para tabuleiro ('X','O',' ').
+
+    Pre-condicoes:
+    - tp: tuplo 3x3 (linhas) com valores 1 (X), -1 (O), 0 (livre).
+
+    Pos-condicoes:
+    - Retorna tabuleiro valido equivalente a tp segundo o mapeamento: 1->'X', -1->'O', 0->' '.
+
+    Exemplos:
+    t = tuplo_para_tabuleiro(((0,1,-1),(0,1,-1),(1,0,-1)))
+    peca_para_str(obter_ganhador(t))  # ex.: '[O]'
+"""
     t = cria_tabuleiro()
     for r in range(3):
         for c in range(3):
@@ -294,7 +381,23 @@ def tuplo_para_tabuleiro(tp):
     return t
 
 def obter_ganhador(t):
-    """Alto nivel: devolve 'X' ou 'O' se ha ganhador; senao ' '."""
+    """
+
+    Devolve a peca vencedora ('X' ou 'O') se existir; caso contrario ' '.
+
+    Pre-condicoes:
+    - t: tabuleiro valido.
+
+    Pos-condicoes:
+    - Retorna 'X' se existir linha/coluna com 3 'X'.
+    - Retorna 'O' se existir linha/coluna com 3 'O'.
+    - Caso contrario, retorna ' '.
+    - Diagonais NAO contam (variante 3x3 conforme enunciado).
+
+    Exemplos:
+    obter_ganhador(cria_tabuleiro())
+
+    """
     if _has_winner(t, 'X'):
         return 'X'
     if _has_winner(t, 'O'):
@@ -363,7 +466,18 @@ def _todos_movimentos(t, j):
 # -----------------------------------------------------------------------------
 
 def obter_movimento_manual(t, j):
-    """Funcao auxiliar (I/O) que recolhe e valida a escolha do jogador humano.
+    '''
+     Funcao auxiliar (I/O) que recolhe e valida a escolha do jogador humano.
+
+    Pre-condicoes:
+    - t: tabuleiro valido (eh_tabuleiro(t) == True).
+    - j: peca valida do jogador atual ('X' ou 'O'); nao pode ser ' '.
+    - Fase do jogo:
+        * Se total de pecas no tabuleiro < 6 → fase de colocacao;
+        * Caso contrario → fase de movimento.
+      (A deteccao da fase e interna; aqui apenas se documenta a expectativa.)
+    - Em fase de movimento, so e permitido 'passar' (p,p) se NAO existir
+      qualquer movimento real possivel para j (todas as pecas bloqueadas).
 
     Fase de colocacao:
         - Entrada: 'cl' (ex.: 'a1'); posicao tem de estar livre.
@@ -376,14 +490,34 @@ def obter_movimento_manual(t, j):
         - Regra 'passar': permitido apenas se NAO existir qualquer movimento
           real possivel; nesse caso aceita (p,p) com p de peca propria.
 
-    Mensagens obrigatorias:
-        - 'Turno do jogador. Escolha uma posicao: '  (colocacao)
-        - 'Turno do jogador. Escolha um movimento: ' (movimento)
+    Pos-condicoes:
+    - Em fase de colocacao: devolve sempre um tuplo de comprimento 1 com uma
+      posicao valida e livre.
+
+	- Em fase de movimento: devolve sempre um tuplo de comprimento 2 com
+      posicoes validas; se nao for (p,p), entao destino e adjacente e livre.
+    - O estado do tabuleiro NAO e alterado por esta funcao (apenas le input).
+
+    Efeitos laterais (I/O):
+    - Escreve o prompt exigido pelo enunciado, exatamente:
+        * 'Turno do jogador. Escolha uma posicao: '  (colocacao)
+        * 'Turno do jogador. Escolha um movimento: ' (movimento)
+    - Le uma linha de stdin e valida o formato/semantica.
 
     Erros:
-        - ValueError('obter_movimento_manual: escolha invalida') se a entrada
-          nao respeitar as regras acima.
-    """
+    - Levanta ValueError('obter_movimento_manual: escolha invalida') se a
+      entrada nao respeitar as regras acima (formato ou semantica).
+
+    Exemplos:
+    >>> # Fase de colocacao (tabuleiro vazio)
+    >>> # input: 'a1'  -> retorna (('a','1'),)
+    >>> # Fase de movimento (com 'X' em b1 e a1 livre, adjacente)
+    >>> # input: 'b1a1' -> retorna (('b','1'), ('a','1'))
+
+    '''
+
+
+
     # Fase de colocacao
     if _fase_colocacao(t):
         s = input('Turno do jogador. Escolha uma posicao: ').strip()
@@ -548,19 +682,36 @@ def _minimax(t, jogador_atual, max_depth=5):
 # --- Movimento automatico
 # -----------------------------------------------------------------------------
 def obter_movimento_auto(t, j, nivel):
-    """Escolha automatica de jogada conforme fase do jogo e nivel de dificuldade.
+    """
+Escolha automatica de jogada conforme a fase do jogo e o nivel de dificuldade.
 
-    Colocacao (todos os niveis):
-        1) Vitoria imediata 2) Bloqueio ao adversario 3) Centro 4) Cantos 5) Laterais
-    Movimento:
-        - 'facil' : primeiro movimento valido por ordem de leitura; se bloqueado,
-                    devolve (p,p) da primeira peca do jogador.
-        - 'normal': equivalente a procurar vitoria imediata (profundidade 1);
-                    se nao existir, igual a 'facil'.
-        - 'dificil': minimax com profundidade 5.
+    Pre-condicoes:
+    - t: tabuleiro valido.
+    - j: 'X' ou 'O'.
+    - nivel: 'facil' | 'normal' | 'dificil'.
 
-    Returns:
-        tuple[posicao] | tuple [ posicao , posicao]
+  Fase de colocacao (total de pecas < 6):
+    - Devolve tuplo (p,) com a posicao escolhida seguindo a prioridade:
+      1) Vitoria imediata; 2) Bloqueio; 3) Centro; 4) Cantos; 5) Laterais.
+
+    Fase de movimento:
+    - 'facil'  : devolve o primeiro movimento valido por ordem de leitura;
+                 se nao houver movimentos, devolve (p,p) (passar) para a 1.ª peca do jogador.
+    - 'normal' : se existir, devolve um movimento de vitoria imediata; caso contrario
+                 igual a 'facil'.
+    - 'dificil': usa minimax (profundidade 5) com 'X' a maximizar e 'O' a minimizar.
+                 Desempates preservam a primeira jogada gerada pela ordem de leitura.
+
+    Pos-condicoes:
+    - Retorna sempre (p,) na colocacao; (p_origem, p_destino) na fase de movimento.
+    - Garantia de determinismo pela ordem de leitura nos empates.
+
+    Erros:
+    - ValueError se nivel nao pertencer a {'facil','normal','dificil'} (se validares explicitamente).
+
+    Exemplos:
+    pos = obter_movimento_auto(cria_tabuleiro(), 'X', 'facil')   # (('b','2'),)
+
     """
     # Fase de colocacao
     if _fase_colocacao(t):
@@ -618,21 +769,30 @@ def _aplicar_movimento(t, j, mv):
     return t
 
 def moinho(jogador, nivel):
-    """Funcao principal: corre um jogo completo humano vs. computador.
+    """
+    Funcao principal: corre um jogo completo (humano vs computador) e devolve o vencedor.
 
-    Args:
-        jogador (str): '[X]' ou '[O]' (peca escolhida pelo humano).
-        nivel (str): 'facil' | 'normal' | 'dificil' (IA).
+    Pre-condicoes:
+    - jogador: str '[_X_]' ou '[_O_]' (literal entre colchetes), peca escolhida pelo humano.
+    - nivel: 'facil' | 'normal' | 'dificil'.
+    - 'X' joga sempre primeiro. Se jogador == '[O]', o computador comeca.
 
-    Efeitos:
-        - Imprime mensagens de arranque, turnos e o tabuleiro apos cada jogada.
-        - X comeca sempre; se humano for '[O]', o computador joga primeiro.
+    Efeitos laterais (I/O):
+    - Imprime exatamente as mensagens exigidas pelo enunciado:
+      * 'Bem-vindo ao JOGO DO MOINHO. Nivel de dificuldade <nivel>.'
+      * 'Turno do computador (<nivel>):'
+      * Representacoes ASCII do tabuleiro apos as jogadas.
+    - Le input do utilizador quando for o turno do humano (via obter_movimento_manual).
+
+    Pos-condicoes:
+    - Retorna a representacao externa da peca vencedora: '[X]' ou '[O]'.
+    - O ciclo termina quando existir ganhador (3 em linha horizontal/vertical).
 
     Erros:
-        - ValueError('moinho: argumentos invalidos') se args nao forem validos.
+    - Levanta ValueError('moinho: argumentos invalidos') se argumentos nao forem validos.
 
-    Returns:
-        str: '[X]' ou '[O]' (representacao externa da peca vencedora).
+    Exemplos:
+    # Jogo auto/manual conforme inputs. Retorna '[X]' ou '[O]'.
     """
     if not (isinstance(jogador, str) and jogador in ('[X]', '[O]') and isinstance(nivel, str) and nivel in ('facil', 'normal', 'dificil')):
         raise ValueError(ERR_MOINHO)
