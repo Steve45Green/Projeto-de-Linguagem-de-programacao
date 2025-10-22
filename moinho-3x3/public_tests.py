@@ -1,4 +1,4 @@
-from p_solved import *
+from projeto import *
 
 # imports para simular a stream de input/output
 import io
