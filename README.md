@@ -1,6 +1,6 @@
 Projeto: Jogo do Moinho (3x3)
 ================================
-Jose Ameixa nº18881 | Diogo Vaz n-21132 | Pedro Duarte n-21190
+José Ameixa nº18881 | Diogo Vaz n-21132 | Pedro Duarte n-21190
 ## Descrição
 Este projeto implementa o Jogo do Moinho (variante 3x3 com três peças por jogador) em Python 3, permitindo que um jogador humano jogue contra o computador em diferentes níveis de dificuldade.
 ## Objetivo
