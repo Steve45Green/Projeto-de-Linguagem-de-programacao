@@ -139,7 +139,6 @@ def obter_pos_c(p: tuple[str, str]) -> str:
     """Seletor: devolve a componente coluna da posicao."""
     return p[0]
 
-
 def obter_pos_l(p: tuple[str, str]) -> str:
     """Seletor: devolve a componente linha da posicao."""
     return p[1]
@@ -466,13 +465,11 @@ def tabuleiros_iguais(t1, t2) -> bool:
     """Teste: True se t1 e t2 forem estruturalmente iguais (todas as casas)."""
     return all(t1[r][c] == t2[r][c] for r in range(3) for c in range(3))
 
-
 def tabuleiro_para_str(t) -> str:
     """Transformador: devolve a representacao ASCII do tabuleiro no formato do enunciado."""
     def linha_str(i: int) -> str:
         return f"{ROWS[i]} " + "-".join(peca_para_str(t[i][j]) for j in range(3))
     return "\n".join([HEADER, linha_str(0), CONN1, linha_str(1), CONN2, linha_str(2)])
-
 
 def tuplo_para_tabuleiro(tp) -> list[list[str]]:
     """Construtor a partir de tuplo 3x3 de inteiros {-1,0,1}.
@@ -495,7 +492,6 @@ def tuplo_para_tabuleiro(tp) -> list[list[str]]:
                 j = ' '
             t[r][c] = j
     return t
-
 
 def obter_ganhador(t) -> str:
     """Funcoes de alto nivel: devolve 'X'/'O' ou ' ' se ainda nao ha vencedor."""
