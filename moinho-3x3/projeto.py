@@ -61,7 +61,7 @@ WIN_LINES = (
 # -----------------------------------------------------------------------------
 # Utilitarios de validacao
 # -----------------------------------------------------------------------------
-def validar_posicao(c: str, l: str) -> None:
+def confirmar_posicao(c: str, l: str) -> None:
     """Valida se (c,l) definem uma posicao do tabuleiro.
 
     Pre-condicoes:
@@ -79,7 +79,7 @@ def validar_posicao(c: str, l: str) -> None:
         raise ValueError(ERR_POS)
 
 
-def validar_peca(s: str) -> None:
+def confirmar_peca(s: str) -> None:
     """Valida o simbolo de peca.
 
     Pre-condicoes:
@@ -121,7 +121,7 @@ def cria_posicao(c: str, l: str) -> tuple[str, str]:
     Erros:
     - ValueError(ERR_POS) se os argumentos nao forem validos.
     """
-    validar_posicao(c, l)
+    confirmar_posicao(c,l)
     return c, l
 
 def cria_copia_posicao(p: tuple[str, str]) -> tuple[str, str]:
@@ -299,7 +299,7 @@ def cria_peca(s: str) -> str:
     Erros:
     - ValueError(ERR_PIECE) se invalido.
     """
-    validar_peca(s)
+    confirmar_peca(s)
     return s
 
 def cria_copia_peca(j: str) -> str:
