@@ -43,7 +43,7 @@ ERR_PIECE = 'cria_peca: argumento invalido'
 ERR_MANUAL = 'obter_movimento_manual: escolha invalida'
 ERR_MOINHO = 'moinho: argumentos invalidos'
 
-# ASCII do tabuleiro (formato exato esperado pelos testes)
+# ASCII do tabuleiro 
 HEADER = '   a   b   c'
 CONN1  = '   | \\ | / |'
 CONN2  = '   | / | \\ |'
@@ -897,3 +897,4 @@ def moinho(jogador: str, nivel: str) -> str:
         turno = outro_jogador(turno)
 
     return peca_para_str(obter_ganhador(tabuleiro))
+
