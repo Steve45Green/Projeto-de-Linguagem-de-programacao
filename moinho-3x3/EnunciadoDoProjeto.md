@@ -605,7 +605,7 @@ comentários para o utilizador (docstring) e comentários para o programador.
 o Tamanho de funções, duplicação de código e abstração procedimental (
 valor).
 o Escolha de nomes (0.5 valores).
-(^2) Podem encontrar algumas boas práticas relacionadas em https://gist.github.com/ruimaranhao/4e18cbe3dad6f68040c32ed6709090a
+(^2) Podem encontrar algumas boas práticas relacionadas em https://gist.github.com/ruimaranhao/4e18cbe3dad6f68040c32ed6709090a3
 
 Recomendações e aspetos a evitar
 As seguintes recomendações e aspetos correspondem a sugestões para evitar maus hábitos
@@ -635,3 +635,4 @@ me com o estilo” é totalmente errada.
 Quando o programa gerar um erro, preocupem-se em descobrir qual a causa do erro.
 
 As “marteladas” no código têm o efeito de distorcer cada vez mais o código.
+
