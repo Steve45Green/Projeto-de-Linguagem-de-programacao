@@ -484,7 +484,7 @@ def _jogada_bloqueio_colocacao(tabuleiro, jogador: str):
 
 # -------- Heuristica adicional: 2-em-linha (segura) ----------------------------------------------
 def _existe_2_em_linha(tabuleiro, jogador: str) -> bool:
-    """Return True if there exists a line with exactly 2 of 'jogador' and 1 empty (horizontal/vertical)."""
+    """Retorna True se existir uma linha com exatamente 2 'jogador' e 1 vazia (horizontal/vertical)."""
     o = outro_jogador(jogador)
     for (a, b, c) in WIN_LINES:
         linha = [tabuleiro[a[0]][a[1]], tabuleiro[b[0]][b[1]], tabuleiro[c[0]][c[1]]]
@@ -493,9 +493,9 @@ def _existe_2_em_linha(tabuleiro, jogador: str) -> bool:
     return False
 
 def _posicao_2_em_linha_segura(tabuleiro, jogador: str):
-    """Return the first free position (reading order) that creates a safe 2-in-line threat.
-    Safe = after placing, opponent does not have an immediate winning placement.
-    If none, return None.
+    """Retorne a primeira posição livre (ordem de leitura) que cria uma ameaça segura de 2 em linha.
+    Seguro = após a colocação, o oponente não tem uma colocação vencedora imediata.
+    Se não houver nenhuma, retorne Nenhum.
     """
     o = outro_jogador(jogador)
     for pos in obter_posicoes_livres(tabuleiro):
