@@ -47,12 +47,12 @@ CONN1 = '   | \\ | / |'
 CONN2 = '   | / | \\ |'
 # Linhas vencedoras (horizontais e verticais)
 WIN_LINES = (
-    ((0, 0), (0, 1), (0, 2)),
-    ((1, 0), (1, 1), (1, 2)),
-    ((2, 0), (2, 1), (2, 2)),
-    ((0, 0), (1, 0), (2, 0)),
-    ((0, 1), (1, 1), (2, 1)),
-    ((0, 2), (1, 2), (2, 2)),
+    ((0,0), (0,1), (0,2)),
+    ((1,0), (1,1), (1,2)),
+    ((2,0), (2,1), (2,2)),
+    ((0,0), (1,0), (2,0)),
+    ((0,1), (1,1), (2,1)),
+    ((0,2), (1,2), (2,2)),
 )
 
 # -------------------------------------------------------------------------------------------------
@@ -334,6 +334,15 @@ def tabuleiro_para_str(tabuleiro) -> str:
 
 def tuplo_para_tabuleiro(tp) -> list[list[str]]:
     """Construtor a partir de tuplo 3x3 de inteiros {-1,0,1}."""
+    # --- Validações mínimas ---
+    if not (isinstance(tp, tuple) and len(tp) == 3 and all(isinstance(l, tuple) and len(l) == 3 for l in tp)):
+        raise ValueError("tuplo_para_tabuleiro: argumento deve ser um tuplo 3x3")
+    valores_validos = {1, 0, -1}
+    for r in range(3):
+        for c in range(3):
+            if tp[r][c] not in valores_validos:
+                raise ValueError("tuplo_para_tabuleiro: valores inválidos (usar 1, 0, -1)")
+
     tabuleiro = cria_tabuleiro()
     for r in range(3):
         for c in range(3):
@@ -673,7 +682,6 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
 
                 if score > best_score:
                     best_score, best_move = score, (pos_origem, pos_destino)
-
                 if score > alpha:
                     alpha = score
                 if alpha >= beta:  # filtragem de ramos (alpha-beta)
@@ -690,7 +698,6 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
 
                 if score < best_score:
                     best_score, best_move = score, (pos_origem, pos_destino)
-
                 if score < beta:
                     beta = score
                 if alpha >= beta:  # filtragem de ramos (alpha-beta)
@@ -703,7 +710,7 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
 # Funcoes de aplicacao e ciclo do jogo
 # -------------------------------------------------------------------------------------------------
 def _executar_movimento(tabuleiro, jogador: str, movimento: tuple):
-    """Aplica a jogada movimento ao tabuleiro (colocacao, movimento real ou passagem)."""
+    """Aplica a jogada ao tabuleiro (colocacao, movimento real ou passagem)."""
     if _esta_na_fase_colocacao(tabuleiro):
         coloca_peca(tabuleiro, jogador, movimento[0])
     else:
@@ -714,11 +721,14 @@ def _executar_movimento(tabuleiro, jogador: str, movimento: tuple):
     return tabuleiro
 
 def moinho(jogador: str, nivel: str) -> str:
-    """Corre um jogo (humano vs computador) e devolve a peca vencedora ('[X]'/'[O]')."""
+    """Corre um jogo (humano vs computador) e devolve a peca vencedora ('[X]'/'[O]').
+
+    Raises:
+        ValueError: 'moinho: argumentos invalidos' para argumentos invalidos.
+    """
     if not (
         isinstance(jogador, str) and jogador in ('[X]', '[O]') and
-        isinstance(nivel, str) and nivel in ('facil', 'normal', 'dificil')
-    ):
+        isinstance(nivel, str) and nivel in ('facil', 'normal', 'dificil')):
         raise ValueError(ERR_MOINHO)
     humano = 'X' if jogador == '[X]' else 'O'
     cpu = outro_jogador(humano)
@@ -738,4 +748,3 @@ def moinho(jogador: str, nivel: str) -> str:
             print(tabuleiro_para_str(tabuleiro))
         turno = outro_jogador(turno)
     return peca_para_str(obter_ganhador(tabuleiro))
-
