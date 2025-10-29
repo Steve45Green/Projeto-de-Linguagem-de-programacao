@@ -334,7 +334,7 @@ def tabuleiro_para_str(tabuleiro) -> str:
 
 def tuplo_para_tabuleiro(tp) -> list[list[str]]:
     """Construtor a partir de tuplo 3x3 de inteiros {-1,0,1}."""
-    # --- Valida??es m?nimas ---
+    # --- Validacoes m?nimas ---
     if not (isinstance(tp, tuple) and len(tp) == 3 and all(isinstance(l, tuple) and len(l) == 3 for l in tp)):
         raise ValueError("tuplo_para_tabuleiro: argumento deve ser um tuplo 3x3")
     valores_validos = {1, 0, -1}
@@ -494,8 +494,8 @@ def _existe_2_em_linha(tabuleiro, jogador: str) -> bool:
 
 def _posicao_2_em_linha_segura(tabuleiro, jogador: str):
     """Retorne a primeira posicao livre (ordem de leitura) que cria uma amea?a segura de 2 em linha.
-    Seguro = ap?s a coloca??o, o oponente n?o tem uma coloca??o vencedora imediata.
-    Se n?o houver nenhuma, retorne Nenhum.
+    Seguro = apos a colocacao, o oponente nao tem uma colocacao vencedora imediata.
+    Se nao houver nenhuma, retorne Nenhum.
     """
     o = outro_jogador(jogador)
     for pos in obter_posicoes_livres(tabuleiro):
@@ -607,7 +607,7 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
       - A ordenacao coloca vitorias imediatas primeiro (melhora a filtragem).
     """
 
-    def aval(tabuleiro_temp: list) -> int:
+    def avaliacao(tabuleiro_temp: list) -> int:
         """Avaliacao do estado: +1 se 'X' ganhou, -1 se 'O' ganhou, 0 caso contrario."""
         g = obter_ganhador(tabuleiro_temp)
         if g == 'X':
@@ -651,12 +651,12 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
 
         Retorna:
             (resultado, melhor_movimento)
-            resultado      -- int em {-1,0,+1}
-            melhor_mov -- (pos_origem, pos_destino) ou None
+            resultado -- int em {-1,0,+1}
+            melhor_movimento -- (pos_origem, pos_destino) ou None
 
         Regras:
-          - Estado terminal: retorna avaliacao e melhor_mov=None.
-          - Sem movimentos: retorna avaliacao e melhor_mov=None.
+          - Estado terminal: retorna avaliacao e melhor_movimento=None.
+          - Sem movimentos: retorna avaliacao e melhor_movimento=None.
           - Caso geral:
              * Se jogador == 'X': maximiza resultado.
              * Se jogador == 'O': minimiza resultado.
@@ -664,11 +664,11 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
         """
         ganhador = obter_ganhador(tabuleiro_temp)
         if ganhador != ' ' or depth == 0:
-            return aval(tabuleiro_temp), None
+            return avaliacao(tabuleiro_temp), None
 
         movs = _gerar_movimentos_validos(tabuleiro_temp, jogador)
         if not movs:
-            return aval(tabuleiro_temp), None
+            return avaliacao(tabuleiro_temp), None
 
         movs = ordenar_movimentos(tabuleiro_temp, jogador, movs)
 
