@@ -673,7 +673,7 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
         movs = ordenar_movimentos(tabuleiro_temp, jogador, movs)
 
         if jogador == 'X':  # maximiza
-            melhor_resultado, best_move = -10, None
+            melhor_resultado, melhor_movimento = -10, None
             for (pos_origem, pos_destino) in movs:
                 t_sim = cria_copia_tabuleiro(tabuleiro_temp)
                 if not posicoes_iguais(pos_origem, pos_destino):  # 'passar' nao altera
@@ -681,15 +681,15 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
                 resultado, _ = mm(t_sim, outro(jogador), depth - 1, alpha, beta)
 
                 if resultado > melhor_resultado:
-                    melhor_resultado, best_move = resultado, (pos_origem, pos_destino)
+                    melhor_resultado, melhor_movimento = resultado, (pos_origem, pos_destino)
                 if resultado > alpha:
                     alpha = resultado
                 if alpha >= beta:  # filtragem de ramos (alpha-beta)
                     break
-            return melhor_resultado, best_move
+            return melhor_resultado, melhor_movimento
 
         else:  # minimiza ('O')
-            melhor_resultado, best_move = 10, None
+            melhor_resultado, melhor_movimento = 10, None
             for (pos_origem, pos_destino) in movs:
                 t_sim = cria_copia_tabuleiro(tabuleiro_temp)
                 if not posicoes_iguais(pos_origem, pos_destino):
@@ -697,12 +697,12 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
                 resultado, _ = mm(t_sim, outro(jogador), depth - 1, alpha, beta)
 
                 if resultado < melhor_resultado:
-                    melhor_resultado, best_move = resultado, (pos_origem, pos_destino)
+                    melhor_resultado, melhor_movimento = resultado, (pos_origem, pos_destino)
                 if resultado < beta:
                     beta = resultado
                 if alpha >= beta:  # filtragem de ramos (alpha-beta)
                     break
-            return melhor_resultado, best_move
+            return melhor_resultado, melhor_movimento
 
     return mm(tabuleiro, jogador_atual, max_depth, -10, 10)
 
