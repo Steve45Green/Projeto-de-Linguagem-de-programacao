@@ -650,7 +650,7 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
           alpha, beta    -- limites da filtragem (int).
 
         Retorna:
-          (resultado, melhor_mov)
+            (resultado, melhor_movimento)
             resultado      -- int em {-1,0,+1}
             melhor_mov -- (pos_origem, pos_destino) ou None
 
