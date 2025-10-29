@@ -493,7 +493,7 @@ def _existe_2_em_linha(tabuleiro, jogador: str) -> bool:
     return False
 
 def _posicao_2_em_linha_segura(tabuleiro, jogador: str):
-    """Retorne a primeira posi??o livre (ordem de leitura) que cria uma amea?a segura de 2 em linha.
+    """Retorne a primeira posicao livre (ordem de leitura) que cria uma amea?a segura de 2 em linha.
     Seguro = ap?s a coloca??o, o oponente n?o tem uma coloca??o vencedora imediata.
     Se n?o houver nenhuma, retorne Nenhum.
     """
