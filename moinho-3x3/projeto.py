@@ -421,11 +421,7 @@ def jogada_valida(tabuleiro, jogador, p_origem, p_destino):
     tem_propria = (obter_peca(tabuleiro, p_origem) == jogador)
     if posicoes_iguais(p_origem, p_destino):
         return tem_propria and _verifica_se_pode_passar(tabuleiro, jogador)
-    return (
-        tem_propria and
-        p_destino in obter_posicoes_adjacentes(p_origem) and
-        eh_posicao_livre(tabuleiro, p_destino)
-    )
+    return (tem_propria and p_destino in obter_posicoes_adjacentes(p_origem) and eh_posicao_livre(tabuleiro, p_destino))
 
 # -------------------------------------------------------------------------------------------------
 # I/O: obter_movimento_manual
@@ -748,3 +744,4 @@ def moinho(jogador: str, nivel: str) -> str:
             print(tabuleiro_para_str(tabuleiro))
         turno = outro_jogador(turno)
     return peca_para_str(obter_ganhador(tabuleiro))
+
