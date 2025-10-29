@@ -31,7 +31,6 @@ Mensagens obrigatorias:
   - Na fase de movimento, usa-se Minimax com filtragem de ramos alpha-beta.
 """
 from typing import Literal
-
 # -------------------------------------------------------------------------------------------------
 # Constantes e mensagens
 # -------------------------------------------------------------------------------------------------
@@ -54,7 +53,6 @@ WIN_LINES = (
     ((0,1), (1,1), (2,1)),
     ((0,2), (1,2), (2,2)),
 )
-
 # -------------------------------------------------------------------------------------------------
 # Utilitarios de validacao
 # -------------------------------------------------------------------------------------------------
@@ -92,7 +90,6 @@ def outro_jogador(jogador: str) -> str:
     - Retorna 'O' se jogador == 'X', senao 'X'.
     """
     return 'O' if jogador == 'X' else 'X'
-
 # -------------------------------------------------------------------------------------------------
 # TAD posicao
 # -------------------------------------------------------------------------------------------------
@@ -136,7 +133,6 @@ def posicoes_iguais(p1, p2) -> bool:
 def posicao_para_str(posicao: tuple[str, str]) -> str:
     """Transformador: converte a posicao em 'cl'."""
     return posicao[0] + posicao[1]
-
 # -----------------------------------------------------------------------------------------------
 # (2) Parsers de strings para posicao e movimento
 # -----------------------------------------------------------------------------------------------
@@ -154,7 +150,6 @@ def str_para_movimento(entrada: str):
     if len(entrada) == 4 and all(entrada[i] in COLS if i % 2 == 0 else entrada[i] in ROWS for i in range(4)):
         return cria_posicao(entrada[0], entrada[1]), cria_posicao(entrada[2], entrada[3])
     raise ValueError(ERR_MANUAL)
-
 # -------------------------------------------------------------------------------------------------
 # (4) TAD movimento (construtores e predicados)
 # -------------------------------------------------------------------------------------------------
@@ -203,7 +198,6 @@ def obter_posicoes_adjacentes(posicao: tuple[str, str]) -> tuple[tuple[str, str]
         cria_posicao(pos[0], pos[1])
         for pos in [tuple(entrada) for entrada in _ADJ[posicao_para_str(posicao)]]
     )
-
 # -------------------------------------------------------------------------------------------------
 # TAD peca
 # -------------------------------------------------------------------------------------------------
@@ -231,7 +225,6 @@ def peca_para_str(jogador: str) -> str:
 def peca_para_inteiro(jogador: str) -> int:
     """Conversao de peca para inteiro: X->+1, O->-1, ' '->0."""
     return 1 if jogador == 'X' else (-1 if jogador == 'O' else 0)
-
 # -------------------------------------------------------------------------------------------------
 # TAD tabuleiro
 # -------------------------------------------------------------------------------------------------
@@ -422,7 +415,6 @@ def jogada_valida(tabuleiro, jogador, p_origem, p_destino):
     if posicoes_iguais(p_origem, p_destino):
         return tem_propria and _verifica_se_pode_passar(tabuleiro, jogador)
     return (tem_propria and p_destino in obter_posicoes_adjacentes(p_origem) and eh_posicao_livre(tabuleiro, p_destino))
-
 # -------------------------------------------------------------------------------------------------
 # I/O: obter_movimento_manual
 # -------------------------------------------------------------------------------------------------
@@ -450,7 +442,6 @@ def obter_movimento_manual(tabuleiro, jogador: str):
     if jogada_valida(tabuleiro, jogador, p_origem, p_destino):
         return p_origem, p_destino
     raise ValueError(ERR_MANUAL)
-
 # -------------------------------------------------------------------------------------------------
 # AI: colocacao
 # -------------------------------------------------------------------------------------------------
@@ -533,7 +524,6 @@ def _escolher_colocacao_ia(tabuleiro, jogador: str):
 
     livres = obter_posicoes_livres(tabuleiro)
     return (livres[0],) if livres else (cria_posicao('a', '1'),)
-
 # -------------------------------------------------------------------------------------------------
 # AI: movimento (facil/normal/dificil)
 # -------------------------------------------------------------------------------------------------
@@ -570,36 +560,29 @@ def obter_movimento_auto(tabuleiro, jogador: str, nivel: str):
         _, mov = _algoritmo_minimax(tabuleiro, jogador, max_depth=5)
         return mov if mov else _escolher_primeiro_movimento(tabuleiro, jogador)
     raise ValueError("obter_movimento_auto: nivel invalido")
-
 # -------------------------------------------------------------------------------------------------
 # Minimax (fase de movimento) com filtragem de ramos alpha-beta
 # -------------------------------------------------------------------------------------------------
 def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
     """Minimax com filtragem de ramos alpha-beta (fase de movimento).
-
     Contexto:
       - 'X' maximiza o valor; 'O' minimiza.
       - Avaliacao:
           +1 se 'X' tem vitoria;
           -1 se 'O' tem vitoria;
            0 caso contrario (empate/estado intermedio).
-
     Argumentos:
-      tabuleiro     -- TAD tabuleiro em fase de movimento (nao na fase de colocacao).
-      jogador_atual -- 'X' ou 'O' (jogador que escolhe no nivel corrente).
-      max_depth     -- profundidade maxima de pesquisa (int >= 0).
-
+      tabuleiro     -- TAD tabuleiro em fase de movimento (nao na fase de colocacao);
+      jogador_atual -- 'X' ou 'O' (jogador que escolhe no nivel corrente);
+      max_depth     -- profundidade maxima de pesquisa (int >= 0);
     Retorna:
       (resultado, melhor_mov)
-        resultado      -- int em {-1, 0, +1} (avaliacao do estado para 'X').
-        melhor_mov -- (pos_origem, pos_destino) ou None se sem movimentos
-                      (ou se depth==0/estado terminal).
+        resultado      -- int em {-1, 0, +1} (avaliacao do estado para 'X');
+        melhor_mov -- (pos_origem, pos_destino) ou None se sem movimentos (ou se depth==0/estado terminal);
         Nota: movimentos (p,p) sinalizam "passar"; nao alteram o tabuleiro na simulacao.
-
     Notas:
-      - A filtragem de ramos alpha-beta ignora ramos que nao podem influenciar
-        a decisao final: se um ramo ja e pior do que uma opcao conhecida para
-        o adversario, e seguro descarta-lo antecipadamente.
+      - A filtragem de ramos alpha-beta ignora ramos que nao podem influenciar a decisao final: 
+        se um ramo ja e pior do que uma opcao conhecida para  o adversario, e seguro descarta-lo antecipadamente.
       - A ordenacao coloca vitorias imediatas primeiro (melhora a filtragem).
     """
 
@@ -618,7 +601,6 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
 
     def ordenar_movimentos(tabuleiro_temp: list, jogador: str, movs: tuple):
         """Prioriza movimentos vencedores imediatos, mantendo determinismo.
-
         Estrategia:
           - Simula (origem->destino) quando nao for 'passar' (p,p);
           - Se der vitoria imediata para 'jogador', vai para 'ganhos';
@@ -675,7 +657,6 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
                 if not posicoes_iguais(pos_origem, pos_destino):  # 'passar' nao altera
                     move_peca(t_sim, pos_origem, pos_destino)
                 resultado, _ = mm(t_sim, outro(jogador), depth - 1, alpha, beta)
-
                 if resultado > melhor_resultado:
                     melhor_resultado, melhor_movimento = resultado, (pos_origem, pos_destino)
                 if resultado > alpha:
@@ -701,7 +682,6 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
             return melhor_resultado, melhor_movimento
 
     return mm(tabuleiro, jogador_atual, max_depth, -10, 10)
-
 # -------------------------------------------------------------------------------------------------
 # Funcoes de aplicacao e ciclo do jogo
 # -------------------------------------------------------------------------------------------------
@@ -744,4 +724,3 @@ def moinho(jogador: str, nivel: str) -> str:
             print(tabuleiro_para_str(tabuleiro))
         turno = outro_jogador(turno)
     return peca_para_str(obter_ganhador(tabuleiro))
-
