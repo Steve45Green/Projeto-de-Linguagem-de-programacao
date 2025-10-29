@@ -356,7 +356,6 @@ def obter_ganhador(tabuleiro) -> str:
     if _tem_vencedor(tabuleiro, 'O'):
         return 'O'
     return ' '
-
 # -------------------------------------------------------------------------------------------------
 # Funcoes auxiliares (ordem de leitura)
 # -------------------------------------------------------------------------------------------------
@@ -399,7 +398,6 @@ def _gerar_movimentos_validos(tabuleiro, jogador: str):
         if pos_jogs:
             jogadas.append((pos_jogs[0], pos_jogs[0]))  # passar
     return tuple(jogadas)
-
 # -----------------------------------------------------------------------------------------------
 # (3) Regra de "passar"
 # -----------------------------------------------------------------------------------------------
@@ -581,11 +579,10 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
         melhor_mov -- (pos_origem, pos_destino) ou None se sem movimentos (ou se depth==0/estado terminal);
         Nota: movimentos (p,p) sinalizam "passar"; nao alteram o tabuleiro na simulacao.
     Notas:
-      - A filtragem de ramos alpha-beta ignora ramos que nao podem influenciar a decisao final: 
+      - A filtragem de ramos alpha-beta ignora ramos que nao podem influenciar a decisao final:
         se um ramo ja e pior do que uma opcao conhecida para  o adversario, e seguro descarta-lo antecipadamente.
       - A ordenacao coloca vitorias imediatas primeiro (melhora a filtragem).
     """
-
     def avaliacao(tabuleiro_temp: list) -> int:
         """Avaliacao do estado: +1 se 'X' ganhou, -1 se 'O' ganhou, 0 caso contrario."""
         g = obter_ganhador(tabuleiro_temp)
@@ -620,24 +617,19 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
 
     def mm(tabuleiro_temp, jogador: str, depth: int, alpha: int, beta: int):
         """Nucleo recursivo do Minimax com filtragem de ramos alpha-beta.
-
         Paramentros:
-          tabuleiro_temp -- estado corrente (lista 3x3).
-          jogador        -- 'X' (maximizador) ou 'O' (minimizador).
-          depth          -- profundidade restante.
+          tabuleiro_temp -- estado corrente (lista 3x3);
+          jogador        -- 'X' (maximizador) ou 'O' (minimizador);
+          depth          -- profundidade restante;
           alpha, beta    -- limites da filtragem (int).
-
         Retorna:
-            (resultado, melhor_movimento)
-            resultado -- int em {-1,0,+1}
-            melhor_movimento -- (pos_origem, pos_destino) ou None
-
+            (resultado, melhor_movimento) resultado -- int em {-1,0,+1} melhor_movimento -- (pos_origem, pos_destino) ou None
         Regras:
-          - Estado terminal: retorna avaliacao e melhor_movimento=None.
-          - Sem movimentos: retorna avaliacao e melhor_movimento=None.
+          - Estado terminal: retorna avaliacao e melhor_movimento=None;
+          - Sem movimentos: retorna avaliacao e melhor_movimento=None;
           - Caso geral:
-             * Se jogador == 'X': maximiza resultado.
-             * Se jogador == 'O': minimiza resultado.
+             * Se jogador == 'X': maximiza resultado;
+             * Se jogador == 'O': minimiza resultado;
              * Aplica filtragem quando alpha >= beta (corte do ramo).
         """
         ganhador = obter_ganhador(tabuleiro_temp)
@@ -698,7 +690,6 @@ def _executar_movimento(tabuleiro, jogador: str, movimento: tuple):
 
 def moinho(jogador: str, nivel: str) -> str:
     """Corre um jogo (humano vs computador) e devolve a peca vencedora ('[X]'/'[O]').
-
     Raises:
         ValueError: 'moinho: argumentos invalidos' para argumentos invalidos.
     """
