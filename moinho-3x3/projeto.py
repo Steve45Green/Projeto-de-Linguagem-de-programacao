@@ -334,14 +334,14 @@ def tabuleiro_para_str(tabuleiro) -> str:
 
 def tuplo_para_tabuleiro(tp) -> list[list[str]]:
     """Construtor a partir de tuplo 3x3 de inteiros {-1,0,1}."""
-    # --- Validações mínimas ---
+    # --- Valida??es m?nimas ---
     if not (isinstance(tp, tuple) and len(tp) == 3 and all(isinstance(l, tuple) and len(l) == 3 for l in tp)):
         raise ValueError("tuplo_para_tabuleiro: argumento deve ser um tuplo 3x3")
     valores_validos = {1, 0, -1}
     for r in range(3):
         for c in range(3):
             if tp[r][c] not in valores_validos:
-                raise ValueError("tuplo_para_tabuleiro: valores inválidos (usar 1, 0, -1)")
+                raise ValueError("tuplo_para_tabuleiro: valores inv?lidos (usar 1, 0, -1)")
 
     tabuleiro = cria_tabuleiro()
     for r in range(3):
@@ -493,9 +493,9 @@ def _existe_2_em_linha(tabuleiro, jogador: str) -> bool:
     return False
 
 def _posicao_2_em_linha_segura(tabuleiro, jogador: str):
-    """Retorne a primeira posição livre (ordem de leitura) que cria uma ameaça segura de 2 em linha.
-    Seguro = após a colocação, o oponente não tem uma colocação vencedora imediata.
-    Se não houver nenhuma, retorne Nenhum.
+    """Retorne a primeira posi??o livre (ordem de leitura) que cria uma amea?a segura de 2 em linha.
+    Seguro = ap?s a coloca??o, o oponente n?o tem uma coloca??o vencedora imediata.
+    Se n?o houver nenhuma, retorne Nenhum.
     """
     o = outro_jogador(jogador)
     for pos in obter_posicoes_livres(tabuleiro):
@@ -594,8 +594,8 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
       max_depth     -- profundidade maxima de pesquisa (int >= 0).
 
     Retorna:
-      (score, melhor_mov)
-        score      -- int em {-1, 0, +1} (avaliacao do estado para 'X').
+      (resultado, melhor_mov)
+        resultado      -- int em {-1, 0, +1} (avaliacao do estado para 'X').
         melhor_mov -- (pos_origem, pos_destino) ou None se sem movimentos
                       (ou se depth==0/estado terminal).
         Nota: movimentos (p,p) sinalizam "passar"; nao alteram o tabuleiro na simulacao.
@@ -650,16 +650,16 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
           alpha, beta    -- limites da filtragem (int).
 
         Retorna:
-          (score, melhor_mov)
-            score      -- int em {-1,0,+1}
+          (resultado, melhor_mov)
+            resultado      -- int em {-1,0,+1}
             melhor_mov -- (pos_origem, pos_destino) ou None
 
         Regras:
           - Estado terminal: retorna avaliacao e melhor_mov=None.
           - Sem movimentos: retorna avaliacao e melhor_mov=None.
           - Caso geral:
-             * Se jogador == 'X': maximiza score.
-             * Se jogador == 'O': minimiza score.
+             * Se jogador == 'X': maximiza resultado.
+             * Se jogador == 'O': minimiza resultado.
              * Aplica filtragem quando alpha >= beta (corte do ramo).
         """
         ganhador = obter_ganhador(tabuleiro_temp)
@@ -673,36 +673,36 @@ def _algoritmo_minimax(tabuleiro, jogador_atual: str, max_depth: int = 5):
         movs = ordenar_movimentos(tabuleiro_temp, jogador, movs)
 
         if jogador == 'X':  # maximiza
-            best_score, best_move = -10, None
+            melhor_resultado, best_move = -10, None
             for (pos_origem, pos_destino) in movs:
                 t_sim = cria_copia_tabuleiro(tabuleiro_temp)
                 if not posicoes_iguais(pos_origem, pos_destino):  # 'passar' nao altera
                     move_peca(t_sim, pos_origem, pos_destino)
-                score, _ = mm(t_sim, outro(jogador), depth - 1, alpha, beta)
+                resultado, _ = mm(t_sim, outro(jogador), depth - 1, alpha, beta)
 
-                if score > best_score:
-                    best_score, best_move = score, (pos_origem, pos_destino)
-                if score > alpha:
-                    alpha = score
+                if resultado > melhor_resultado:
+                    melhor_resultado, best_move = resultado, (pos_origem, pos_destino)
+                if resultado > alpha:
+                    alpha = resultado
                 if alpha >= beta:  # filtragem de ramos (alpha-beta)
                     break
-            return best_score, best_move
+            return melhor_resultado, best_move
 
         else:  # minimiza ('O')
-            best_score, best_move = 10, None
+            melhor_resultado, best_move = 10, None
             for (pos_origem, pos_destino) in movs:
                 t_sim = cria_copia_tabuleiro(tabuleiro_temp)
                 if not posicoes_iguais(pos_origem, pos_destino):
                     move_peca(t_sim, pos_origem, pos_destino)
-                score, _ = mm(t_sim, outro(jogador), depth - 1, alpha, beta)
+                resultado, _ = mm(t_sim, outro(jogador), depth - 1, alpha, beta)
 
-                if score < best_score:
-                    best_score, best_move = score, (pos_origem, pos_destino)
-                if score < beta:
-                    beta = score
+                if resultado < melhor_resultado:
+                    melhor_resultado, best_move = resultado, (pos_origem, pos_destino)
+                if resultado < beta:
+                    beta = resultado
                 if alpha >= beta:  # filtragem de ramos (alpha-beta)
                     break
-            return best_score, best_move
+            return melhor_resultado, best_move
 
     return mm(tabuleiro, jogador_atual, max_depth, -10, 10)
 
