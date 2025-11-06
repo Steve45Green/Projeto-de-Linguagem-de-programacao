@@ -424,6 +424,27 @@ def _ordenar_movimentos(tabuleiro: List[List[str]], jogador: str, movs: Tuple[Tu
             restantes.append(mov)
     return tuple(ganhos + restantes)
 
+
+def _minimax_generico(tabuleiro, jogador, depth, alpha, beta, movs, melhor_val_inicial, comparar, atualizar_limite):
+    melhor_val, melhor_mov = melhor_val_inicial, None
+
+    for mov in movs:
+        t_sim = cria_copia_tabuleiro(tabuleiro)
+        if eh_mov_real(mov):
+            move_peca(t_sim, mov[0], mov[1])# TODO
+        val, _ = _minimax_recursivo(t_sim, _obter_adversario(jogador), depth -1, alpha, beta)
+
+        if comparar(val, melhor_val):
+            melhor_val, melhor_mov = val, mov
+        
+        alpha, beta = atualizar_limite(alpha, beta, val)
+
+        if alpha >= beta:
+            break
+    return melhor_val, melhor_mov
+
+
+
 def _minimax_recursivo(tabuleiro: List[List[str]], jogador: str, depth: int, alpha: int, beta: int) -> Tuple[int, Optional[Tuple[Tuple[str, str], Tuple[str, str]]]]:
     if obter_ganhador(tabuleiro) != ' ' or depth == 0:
         return _avaliacao(tabuleiro), None
@@ -431,33 +452,20 @@ def _minimax_recursivo(tabuleiro: List[List[str]], jogador: str, depth: int, alp
     if not movs:
         return _avaliacao(tabuleiro), None
     movs = _ordenar_movimentos(tabuleiro, jogador, movs)
-    outro_jogador = _obter_adversario(jogador)
+
     if jogador == 'X':  # maximiza
-        melhor_val, melhor_mov = -inf, None
-        for mov in movs:
-            t_sim = cria_copia_tabuleiro(tabuleiro)
-            if eh_mov_real(mov):
-                move_peca(t_sim, mov[0], mov[1])
-            val, _ = _minimax_recursivo(t_sim, outro_jogador, depth - 1, alpha, beta)
-            if val > melhor_val:
-                melhor_val, melhor_mov = val, mov
-            alpha = max(alpha, val)
-            if alpha >= beta:
-                break
-        return melhor_val, melhor_mov
+        return _minimax_generico(
+            tabuleiro, jogador, depth, alpha, beta, movs, inf,  
+            lambda val, melhor_val: val > melhor_val,
+            lambda alpha, beta, val: (max(alpha, val), beta)
+        )
+    
     else:  # minimiza
-        melhor_val, melhor_mov = inf, None
-        for mov in movs:
-            t_sim = cria_copia_tabuleiro(tabuleiro)
-            if eh_mov_real(mov):
-                move_peca(t_sim, mov[0], mov[1])
-            val, _ = _minimax_recursivo(t_sim, outro_jogador, depth - 1, alpha, beta)
-            if val < melhor_val:
-                melhor_val, melhor_mov = val, mov
-            beta = min(beta, val)
-            if alpha >= beta:
-                break
-        return melhor_val, melhor_mov
+        return _minimax_generico(
+            tabuleiro, jogador, depth, alpha, beta, movs, inf,
+            lambda val, melhor_val: val < melhor_val,
+            lambda alpha, beta, val: (alpha, min(val, beta))
+        )
 
 def _algoritmo_minimax(tabuleiro: List[List[str]], jogador: str, max_depth: int = 5) -> Tuple[int, Optional[Tuple[Tuple[str, str], Tuple[str, str]]]]:
     return _minimax_recursivo(tabuleiro, jogador, max_depth, -inf, inf)

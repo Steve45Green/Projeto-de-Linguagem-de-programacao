@@ -181,13 +181,13 @@ def eh_mov_real(movimento):
 # LINHA-CHAVE: a ordem em 'b1' e 'b3' e vertical primeiro, depois laterais.
 _ADJ = {
     'a1': ('b1', 'a2', 'b2'),
-    'b1': ('b2', 'a1', 'c1'),  # vertical antes dos laterais (Testes)
+    'b1': ('b2', 'a1', 'c1'),
     'c1': ('b1', 'c2', 'b2'),
     'a2': ('a1', 'a3', 'b2'),
     'b2': ('a2', 'b1', 'c2', 'b3', 'a1', 'c1', 'a3', 'c3'),
     'c2': ('c1', 'c3', 'b2'),
     'a3': ('a2', 'b3', 'b2'),
-    'b3': ('b2', 'a3', 'c3'),  # vertical antes dos laterais
+    'b3': ('b2', 'a3', 'c3'),
     'c3': ('c2', 'b3', 'b2')
 }
 def obter_posicoes_adjacentes(posicao: tuple[str, str]) -> tuple[tuple[str, str], ...]:
