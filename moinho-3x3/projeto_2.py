@@ -87,14 +87,21 @@ def eh_colocacao(movimento):
 def cria_mov_passar(posicao):
     return posicao, posicao
 
-def eh_passar(movimento):
-    return len(movimento) == 2 and posicoes_iguais(movimento[0], movimento[1])
+def eh_passar(mov):
+    return len(mov) == 2 and posicoes_iguais(obter_pos_origem(mov), obter_pos_destino(mov))
 
 def cria_movimento(pos_origem, pos_destino):
     return pos_origem, pos_destino
 
-def eh_mov_real(movimento):
-    return len(movimento) == 2 and not posicoes_iguais(movimento[0], movimento[1])
+def eh_mov_real(mov):
+    return len(mov) == 2 and not posicoes_iguais(obter_pos_origem(mov), obter_pos_destino(mov))
+
+def obter_pos_origem(movimento):
+    return movimento[0]
+
+def obter_pos_destino(movimento):
+    return movimento[1]
+
 
 _adj = {
     'a1': ('b1', 'a2', 'b2'),
@@ -387,7 +394,7 @@ def _jogada_vencedora_movimento(tabuleiro: List[List[str]], jogador: str) -> Opt
         if eh_passar(mov):
             continue
         t_copy = cria_copia_tabuleiro(tabuleiro)
-        move_peca(t_copy, mov[0], mov[1])
+        move_peca(t_copy, obter_pos_origem(mov),obter_pos_destino(mov))
         if obter_ganhador(t_copy) == jogador:
             return mov
     return None
@@ -417,7 +424,7 @@ def _ordenar_movimentos(tabuleiro: List[List[str]], jogador: str, movs: Tuple[Tu
     for mov in movs:
         t_sim = cria_copia_tabuleiro(tabuleiro)
         if eh_mov_real(mov):
-            move_peca(t_sim, mov[0], mov[1])
+            move_peca(t_sim, obter_pos_origem(mov), obter_pos_destino(mov))
         if obter_ganhador(t_sim) == jogador:
             ganhos.append(mov)
         else:
@@ -431,7 +438,7 @@ def _minimax_generico(tabuleiro, jogador, depth, alpha, beta, movs, melhor_val_i
     for mov in movs:
         t_sim = cria_copia_tabuleiro(tabuleiro)
         if eh_mov_real(mov):
-            move_peca(t_sim, mov[0], mov[1])# TODO
+            move_peca(t_sim, obter_pos_origem(mov), obter_pos_destino(mov))# TODO
         val, _ = _minimax_recursivo(t_sim, _obter_adversario(jogador), depth -1, alpha, beta)
 
         if comparar(val, melhor_val):
@@ -475,9 +482,9 @@ def _algoritmo_minimax(tabuleiro: List[List[str]], jogador: str, max_depth: int 
 # -------------------------------------------------------------------------------------------------
 def _aplicar_movimento_no_tabuleiro(tabuleiro: List[List[str]], jogador: str, movimento: Tuple[Tuple[str, str], ...]) -> List[List[str]]:
     if eh_colocacao(movimento):
-        coloca_peca(tabuleiro, jogador, movimento[0])
+        coloca_peca(tabuleiro, jogador, obter_pos_origem(movimento))
     elif eh_mov_real(movimento):
-        move_peca(tabuleiro, movimento[0], movimento[1])
+        move_peca(tabuleiro, obter_pos_origem(movimento), obter_pos_destino(movimento))
     return tabuleiro
 
 def moinho(jogador_str: str, nivel: str) -> str:
