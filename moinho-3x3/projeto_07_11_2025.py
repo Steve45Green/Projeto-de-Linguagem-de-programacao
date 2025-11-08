@@ -482,7 +482,6 @@ def obter_movimento_manual(tabuleiro: List[List[str]], jogador: str) -> Tuple[Tu
         raise ValueError(erro_movimento_manual)
     return movimento
 
-
 def _fase_colocacao(tabuleiro: List[List[str]]) -> bool:
     """Determina se o jogo ainda se encontra na fase de colocação de peças.
     Argumentos:
