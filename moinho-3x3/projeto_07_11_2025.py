@@ -353,7 +353,6 @@ def tabuleiros_iguais(tabuleiro1: List[List[str]], tabuleiro2: List[List[str]]) 
     """
     return tabuleiro1 == tabuleiro2
 
-
 def tabuleiro_para_str(tabuleiro: List[List[str]]) -> str:
     """Converte um tabuleiro numa representação textual legível.
       Argumentos:
@@ -454,7 +453,6 @@ def _analisar_entrada(entrada: str) -> Tuple[Tuple[str, str], ...]:
         return cria_posicao(entrada[0], entrada[1]), cria_posicao(entrada[2], entrada[3])
     raise ValueError(erro_movimento_manual)
 
-
 def obter_movimento_manual(tabuleiro: List[List[str]], jogador: str) -> Tuple[Tuple[str, str], ...]:
     """Obtém o movimento do jogador humano, validando a entrada.
     Argumentos:
@@ -494,7 +492,6 @@ def _fase_colocacao(tabuleiro: List[List[str]]) -> bool:
     """
     return len(obter_posicoes_jogador(tabuleiro, 'X')) < 3 or len(obter_posicoes_jogador(tabuleiro, 'O')) < 3
 
-
 def _encontrar_posicao(tabuleiro: List[List[str]], jogador: str, predicado) -> Optional[Tuple[str, str]]:
     """Procura uma posição que satisfaça um predicado específico.
     Argumentos:
@@ -510,7 +507,6 @@ def _encontrar_posicao(tabuleiro: List[List[str]], jogador: str, predicado) -> O
         if predicado(tab_copia):
             return pos
     return None
-
 
 def _posicao_vitoria(tabuleiro: List[List[str]], jogador: str) -> Optional[Tuple[str, str]]:
     """Encontra uma posição que permita ao jogador ganhar imediatamente.
@@ -532,7 +528,6 @@ def _posicao_bloqueio(tabuleiro: List[List[str]], jogador: str) -> Optional[Tupl
            Optional[Tuple[str, str]]: Posição de bloqueio ou None.
        """
     return _posicao_vitoria(tabuleiro, _obter_adversario(jogador))
-
 
 def obter_movimento_auto(tabuleiro: List[List[str]], jogador: str, nivel: str) -> Tuple[Tuple[str, str], ...]:
     """Calcula o movimento automático do computador com base no nível de dificuldade.
@@ -574,7 +569,6 @@ def obter_movimento_auto(tabuleiro: List[List[str]], jogador: str, nivel: str) -
         _, mov = _minimax(tabuleiro, jogador, 5, -infinito, infinito, jogador == 'X')
         return mov or movimentos[0]
 
-
 def _avaliar_tabuleiro(tabuleiro: List[List[str]]) -> int:
     """Avalia o estado do tabuleiro.
     Argumentos:
@@ -603,7 +597,6 @@ def _ordenar_movimentos(tabuleiro: List[List[str]], jogador: str,movimentos: Tup
         else:
             movs_restantes.append(mov)
     return tuple(movs_ganho + movs_restantes)
-
 
 def _minimax(tabuleiro: List[List[str]], jogador: str, profundidade: int, alpha: int, beta: int, maximizando: bool) -> \
         Tuple[int, Optional[Tuple[Tuple[str, str], Tuple[str, str]]]]:
@@ -641,7 +634,6 @@ def _minimax(tabuleiro: List[List[str]], jogador: str, profundidade: int, alpha:
         if alpha >= beta:
             break
     return melhor_valor, melhor_movimento
-
 
 def moinho(jogador_str: str, nivel_dificuldade: str) -> str:
     """Função principal para jogar o jogo do Moinho.
