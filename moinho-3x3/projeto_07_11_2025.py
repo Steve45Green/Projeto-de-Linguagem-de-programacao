@@ -329,9 +329,9 @@ def eh_tabuleiro(arg) -> bool:
     count_x, count_o = pieces.count('X'), pieces.count('O')
     if count_x > 3 or count_o > 3 or abs(count_x - count_o) > 1:
         return False
-    winner_x = _tem_vencedor(arg, 'X')
-    winner_o = _tem_vencedor(arg, 'O')
-    return not (winner_x and winner_o)
+    vencedor_x = _tem_vencedor(arg, 'X')
+    vencedor_o = _tem_vencedor(arg, 'O')
+    return not (vencedor_x and vencedor_o)
 
 def eh_posicao_livre(tabuleiro: List[List[str]], posicao: Tuple[str, str]) -> bool:
     """Verifica se uma posição no tabuleiro está livre (não ocupada).
