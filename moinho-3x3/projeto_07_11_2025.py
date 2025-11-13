@@ -25,33 +25,33 @@ linhas_vencedoras = (
     ((0, 1), (1, 1), (2, 1)),
     ((0, 2), (1, 2), (2, 2)),
 )
-infinito = 10  # Valor simb?lico para inicializacao de alpha/beta no algoritmo Minimax
+infinito = 10  # Valor simbolico para inicializacao de alpha/beta no algoritmo Minimax
 # -------------------------------------------------------------------------------------------------
-# Utilit?rios de valida??o
+# Utilitarios de validacao
 # -------------------------------------------------------------------------------------------------
 def _validar_posicao(coluna: str, linha: str) -> None:
-    """Verifica se a coluna e a linha fornecidas representam uma posicao v?lida no tabuleiro.
+    """Verifica se a coluna e a linha fornecidas representam uma posicao valida no tabuleiro.
     Argumentos:
         coluna (str): Letra da coluna ('a', 'b' ou 'c').
         linha (str): N?mero da linha ('1', '2' ou '3').
-    Exce??es:
-        ValueError: ? gerado se a coluna ou a linha n?o forem validas.
+    Excecoes:
+        ValueError: E gerado se a coluna ou a linha nao forem validas.
     """
     if not (isinstance(coluna, str) and isinstance(linha, str) and coluna in colunas and linha in linhas):
         raise ValueError(erro_posicao)
 
 def _validar_peca(entrada: str) -> None:
-    """Verifica se o s?mbolo fornecido representa uma peca valida do jogo.
+    """Verifica se simbolo fornecido representa uma peca valida do jogo.
     Argumentos:
-        entrada (str): Caracter que identifica a peca ('X', 'O' ou ' ').
-    Exce??es:
-        ValueError: ? lan?ada se o argumento n?o corresponder a uma peca valida.
+        entrada (str): Caracter que identifica a peca ('X', 'O' ou '').
+    Excecoes:
+        ValueError: Da erro se o argumento nao corresponder a uma peca valida.
     """
     if not (isinstance(entrada, str) and len(entrada) == 1 and entrada in ('X', 'O', ' ')):
         raise ValueError(erro_peca)
 
 def _obter_adversario(jogador: str) -> str:
-    """Devolve o identificador do advers?rio do jogador indicado.
+    """Devolve o identificador do adversario do jogador indicado.
     Argumentos:
         jogador (str): Identificador do jogador atual ('X' ou 'O').
     Retorna:
@@ -68,7 +68,7 @@ adjacencias = {
     'c3': ('b2', 'c2', 'b3')
 }
 def _indice_posicao_leitura(posicao: Tuple[str, str]) -> int:
-    """Calcula o ?ndice de leitura de uma posicao, usado para efeitos de ordenacao.
+    """Calcula o indice de leitura de uma posicao, usado para efeitos de ordenacao.
     Argumentos:
         posicao (Tuple[str, str]): A posi??o (coluna, linha).
     Retorna:
@@ -80,21 +80,21 @@ def cria_posicao(coluna: str, linha: str) -> Tuple[str, str]:
     """Cria uma nova posicao valida no tabuleiro.
     Argumentos:
         coluna (str): Letra da coluna ('a', 'b' ou 'c').
-        linha (str): N?mero da linha ('1', '2' ou '3').
+        linha (str): Numero da linha ('1', '2' ou '3').
     Retorna:
-        Tuple[str, str]: A posi?cao criada no formato (coluna, linha).
+        Tuple[str, str]: A posicao criada no formato (coluna, linha).
     Exce??es:
-        ValueError: ? lan?ada se os argumentos n?o forem validos.
+        ValueError:E gerada se os argumentos nao forem validos.
     """
     _validar_posicao(coluna, linha)
     return coluna, linha
 
 def cria_copia_posicao(posicao: Tuple[str, str]) -> Tuple[str, str]:
-    """Cria uma c?pia independente de uma posicao existente.
+    """Cria uma copia independente de uma posicao existente.
     Argumentos:
         posicao (Tuple[str, str]): A posicao a copiar.
     Retorna:
-        Tuple[str, str]: Uma c?pia da posicao fornecida.
+        Tuple[str, str]: Uma copia da posicao fornecida.
     """
     return posicao
 
@@ -110,18 +110,18 @@ def obter_pos_c(posicao: Tuple[str, str]) -> str:
 def obter_pos_l(posicao: Tuple[str, str]) -> str:
     """Devolve a linha correspondente a uma posicao.
     Argumentos:
-        posicao (Tuple[str, str]): A posi??o a analisar.
+        posicao (Tuple[str, str]): A posicao a analisar.
     Retorna:
         str: A linha da posicao ('1', '2' ou '3').
     """
     return posicao[1]
 
 def eh_posicao(arg) -> bool:
-    """Verifica se o argumento corresponde a uma posi??o v?lida do tabuleiro.
+    """Verifica se o argumento corresponde a uma posicao valida do tabuleiro.
     Argumentos:
         arg: O valor a verificar.
     Retorna:
-        bool: True se for uma posi??o valida, False, caso contrario.
+        bool: True se for uma posicao valida, False, caso contrario.
     """
     return isinstance(arg, tuple) and len(arg) == 2 and arg[0] in colunas and arg[1] in linhas
 
@@ -145,7 +145,7 @@ def posicao_para_str(posicao: Tuple[str, str]) -> str:
     return ''.join(posicao)
 
 def obter_posicoes_adjacentes(posicao: Tuple[str, str]) -> Tuple[Tuple[str, str], ...]:
-    """Devolve todas as posi??es diretamente adjacentes a posicao indicada.
+    """Devolve todas as posicoes diretamente adjacentes a posicao indicada.
     Argumentos:
         posicao (Tuple[str, str]): A posicao de referencia.
     Retorna:
@@ -157,13 +157,13 @@ def obter_posicoes_adjacentes(posicao: Tuple[str, str]) -> Tuple[Tuple[str, str]
 # TAD peca
 # -------------------------------------------------------------------------------------------------
 def cria_peca(entrada: str) -> str:
-    """Cria uma nova peca do jogo, garantindo que o s?mbolo e valido.
+    """Cria uma nova peca do jogo, garantindo que o simbolo e valido.
     Argumentos:
-        entrada (str): Car?cter que identifica a peca ('X', 'O' ou ' ').
+        entrada (str): Caracter que identifica a peca ('X', 'O' ou '').
     Retorna:
         str: A peca criada.
     Exce??es:
-        ValueError: ? lan?ada se o argumento n?o corresponder a uma peca valida.
+        ValueError: E gerado se o argumento nao corresponder a uma peca valida.
     """
     _validar_peca(entrada)
     return entrada
@@ -182,12 +182,12 @@ def eh_peca(arg) -> bool:
     Argumentos:
         arg: O valor a verificar.
     Retorna:
-        bool: True se for uma pe?a v?lida ('X', 'O' ou ' '), False, caso contrario.
+        bool: True se for uma peca valida ('X', 'O' ou ''), False, caso contrario.
     """
     return isinstance(arg, str) and len(arg) == 1 and arg in ('X', 'O', ' ')
 
 def pecas_iguais(peca1: str, peca2: str) -> bool:
-    """Verifica se duas pecas s?o iguais.
+    """Verifica se duas pecas sao iguais.
     Argumentos:
         peca1 (str): Primeira peca.
         peca2 (str): Segunda peca.
@@ -197,7 +197,7 @@ def pecas_iguais(peca1: str, peca2: str) -> bool:
     return eh_peca(peca1) and eh_peca(peca2) and peca1 == peca2
 
 def peca_para_str(peca: str) -> str:
-    """Converte uma pe?a para a sua representacao textual.
+    """Converte uma peca para a sua representacao textual.
        Argumentos:
            peca (str): A peca a converter.
        Retorna:
@@ -220,7 +220,7 @@ def peca_para_inteiro(peca: str) -> int:
 def cria_tabuleiro() -> List[List[str]]:
     """Cria um tabuleiro vazio de 3x3 para o jogo.
      Retorna:
-         List[List[str]]: Tabuleiro inicial com todas as posi??es vazias.
+         List[List[str]]: Tabuleiro inicial com todas as posicoes vazias.
      """
     return [[' ' for _ in range(3)] for _ in range(3)]
 
@@ -229,10 +229,9 @@ def cria_copia_tabuleiro(tabuleiro: List[List[str]]) -> List[List[str]]:
     Argumentos:
         tabuleiro (List[List[str]]): Tabuleiro a copiar.
     Retorna:
-        List[List[str]]: C?pia do tabuleiro fornecido.
+        List[List[str]]: Copia do tabuleiro fornecido.
     """
     return [row[:] for row in tabuleiro]
-
 
 def _indice(posicao: Tuple[str, str]) -> Tuple[int, int]:
     """Converte uma posicao em indices de linha e coluna.
@@ -247,7 +246,7 @@ def obter_peca(tabuleiro: List[List[str]], posicao: Tuple[str, str]) -> str:
     """Obtem a peca presente numa posicao especifica do tabuleiro.
     Argumentos:
         tabuleiro (List[List[str]]): O tabuleiro.
-        posicao (Tuple[str, str]): Posi??o a consultar.
+        posicao (Tuple[str, str]): Posicao a consultar.
     Retorna:
         str: A peca presente na posicao ('X', 'O' ou ' ').
     """
@@ -262,7 +261,7 @@ def obter_vetor(tabuleiro: List[List[str]], seletor: str) -> Tuple[str, ...]:
     Retorna:
         Tuple[str, ...]: Tuplo de pecas correspondentes.
     Exce??es:
-        ValueError: ? geradas se o seletor for invalido.
+        ValueError: Da erro se o seletor for invalido.
     """
     if seletor in colunas:
         c = ord(seletor) - ord('a')
@@ -298,13 +297,13 @@ def remove_peca(tabuleiro: List[List[str]], posicao: Tuple[str, str]) -> List[Li
     return tabuleiro
 
 def move_peca(tabuleiro: List[List[str]], posicao_origem: Tuple[str, str], posicao_destino: Tuple[str, str]) -> List[List[str]]:
-    """Move uma peca de uma posicao de origem para uma posi??o de destino.
+    """Move uma peca de uma posicao de origem para uma posicao de destino.
         Argumentos:
             tabuleiro (List[List[str]]): O tabuleiro.
-            posicao_origem (Tuple[str, str]): Posicao atual da pe?a.
-            posicao_destino (Tuple[str, str]): Nova posicao da pe?a.
+            posicao_origem (Tuple[str, str]): Posicao atual da peca.
+            posicao_destino (Tuple[str, str]): Nova posicao da peca.
         Retorna:
-            List[List[str]]:Tabuleiro atualizado.
+            List[List[str]]: Tabuleiro atualizado.
         """
     peca = obter_peca(tabuleiro, posicao_origem)
     remove_peca(tabuleiro, posicao_origem)
@@ -312,7 +311,7 @@ def move_peca(tabuleiro: List[List[str]], posicao_origem: Tuple[str, str], posic
     return tabuleiro
 
 def eh_tabuleiro(arg) -> bool:
-    """Verifica se um argumento representa um tabuleiro v?lido do jogo.
+    """Verifica se um argumento representa um tabuleiro valido do jogo.
     Argumentos:
         arg: Valor a verificar.
     Retorna:
@@ -462,7 +461,7 @@ def obter_movimento_manual(tabuleiro: List[List[str]], jogador: str) -> Tuple[Tu
     Retorna:
         Tuple[Tuple[str, str], ...]: Movimento escolhido (posicao ou origem/destino).
     Excecoes:
-        ValueError: Se a escolha for inv?lida.
+        ValueError: Se a escolha for invalida.
     """
     import sys
     mensagem = 'Turno do jogador. Escolha uma ' + ('posicao' if _fase_colocacao(tabuleiro) else 'movimento') + ': '
@@ -638,10 +637,10 @@ def _minimax(tabuleiro: List[List[str]], jogador: str, profundidade: int, alpha:
 def moinho(jogador_str: str, nivel_dificuldade: str) -> str:
     """Funcao principal para jogar o jogo do Moinho.
     Argumentos:
-        jogador_str (str): Pe?a do jogador humano ('[X]' ou '[O]').
+        jogador_str (str): Peca do jogador humano ('[X]' ou '[O]').
         nivel_dificuldade (str): N?vel de dificuldade do computador ('facil', 'normal', 'dificil').
     Retorna:
-        str: Representa??o da pe?a vencedora ('[X]', '[O]').
+        str: Representacao da peca vencedora ('[X]', '[O]').
     Exce??es:
         ValueError: Se os argumentos forem inv?lidos.
     """
