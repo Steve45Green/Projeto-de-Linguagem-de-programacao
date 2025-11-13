@@ -10,6 +10,7 @@ erro_peca = 'cria_peca: argumento invalido'
 erro_movimento_manual = 'obter_movimento_manual: escolha invalida'
 erro_moinho = 'moinho: argumentos invalidos'
 
+
 # ASCII do tabuleiro
 cabecalho = '   a   b   c'
 conexao1 = '   | \\ | / |'
@@ -24,37 +25,37 @@ linhas_vencedoras = (
     ((0, 1), (1, 1), (2, 1)),
     ((0, 2), (1, 2), (2, 2)),
 )
-infinito = 10  # Valor simbólico para inicialização de alpha/beta no algoritmo Minimax
+infinito = 10  # Valor simb?lico para inicializacao de alpha/beta no algoritmo Minimax
 # -------------------------------------------------------------------------------------------------
-# Utilitários de validação
+# Utilit?rios de valida??o
 # -------------------------------------------------------------------------------------------------
 def _validar_posicao(coluna: str, linha: str) -> None:
-    """Verifica se a coluna e a linha fornecidas representam uma posição válida no tabuleiro.
+    """Verifica se a coluna e a linha fornecidas representam uma posicao v?lida no tabuleiro.
     Argumentos:
         coluna (str): Letra da coluna ('a', 'b' ou 'c').
-        linha (str): Número da linha ('1', '2' ou '3').
-    Exceções:
-        ValueError: É lançada se a coluna ou a linha não forem válidas.
+        linha (str): N?mero da linha ('1', '2' ou '3').
+    Exce??es:
+        ValueError: ? gerado se a coluna ou a linha n?o forem validas.
     """
     if not (isinstance(coluna, str) and isinstance(linha, str) and coluna in colunas and linha in linhas):
         raise ValueError(erro_posicao)
 
 def _validar_peca(entrada: str) -> None:
-    """Verifica se o símbolo fornecido representa uma peça válida do jogo.
+    """Verifica se o s?mbolo fornecido representa uma peca valida do jogo.
     Argumentos:
-        entrada (str): Carácter que identifica a peça ('X', 'O' ou ' ').
-    Exceções:
-        ValueError: É lançada se o argumento não corresponder a uma peça válida.
+        entrada (str): Caracter que identifica a peca ('X', 'O' ou ' ').
+    Exce??es:
+        ValueError: ? lan?ada se o argumento n?o corresponder a uma peca valida.
     """
     if not (isinstance(entrada, str) and len(entrada) == 1 and entrada in ('X', 'O', ' ')):
         raise ValueError(erro_peca)
 
 def _obter_adversario(jogador: str) -> str:
-    """Devolve o identificador do adversário do jogador indicado.
+    """Devolve o identificador do advers?rio do jogador indicado.
     Argumentos:
         jogador (str): Identificador do jogador atual ('X' ou 'O').
     Retorna:
-        str: O identificador do adversário ('O' se o jogador for 'X', e vice-versa).
+        str: O identificador do adversario ('O' se o jogador for 'X', e vice-versa).
     """
     return 'O' if jogador == 'X' else 'X'
 # -------------------------------------------------------------------------------------------------
@@ -67,88 +68,88 @@ adjacencias = {
     'c3': ('b2', 'c2', 'b3')
 }
 def _indice_posicao_leitura(posicao: Tuple[str, str]) -> int:
-    """Calcula o índice de leitura de uma posição, usado para efeitos de ordenação.
+    """Calcula o ?ndice de leitura de uma posicao, usado para efeitos de ordenacao.
     Argumentos:
-        posicao (Tuple[str, str]): A posição (coluna, linha).
+        posicao (Tuple[str, str]): A posi??o (coluna, linha).
     Retorna:
-        int: Índice numérico associado à posição.
+        int: Indice numerico associado a posicao.
     """
     return linhas.index(posicao[1]) * 3 + colunas.index(posicao[0])
 
 def cria_posicao(coluna: str, linha: str) -> Tuple[str, str]:
-    """Cria uma nova posição válida no tabuleiro.
+    """Cria uma nova posicao valida no tabuleiro.
     Argumentos:
         coluna (str): Letra da coluna ('a', 'b' ou 'c').
-        linha (str): Número da linha ('1', '2' ou '3').
+        linha (str): N?mero da linha ('1', '2' ou '3').
     Retorna:
-        Tuple[str, str]: A posição criada no formato (coluna, linha).
-    Exceções:
-        ValueError: É lançada se os argumentos não forem válidos.
+        Tuple[str, str]: A posi?cao criada no formato (coluna, linha).
+    Exce??es:
+        ValueError: ? lan?ada se os argumentos n?o forem validos.
     """
     _validar_posicao(coluna, linha)
     return coluna, linha
 
 def cria_copia_posicao(posicao: Tuple[str, str]) -> Tuple[str, str]:
-    """Cria uma cópia independente de uma posição existente.
+    """Cria uma c?pia independente de uma posicao existente.
     Argumentos:
-        posicao (Tuple[str, str]): A posição a copiar.
+        posicao (Tuple[str, str]): A posicao a copiar.
     Retorna:
-        Tuple[str, str]: Uma cópia da posição fornecida.
+        Tuple[str, str]: Uma c?pia da posicao fornecida.
     """
     return posicao
 
 def obter_pos_c(posicao: Tuple[str, str]) -> str:
-    """Devolve a coluna correspondente a uma posição.
+    """Devolve a coluna correspondente a uma posicao.
     Argumentos:
-        posicao (Tuple[str, str]): A posição a analisar.
+        posicao (Tuple[str, str]): A posicao a analisar.
     Retorna:
-        str: A coluna da posição ('a', 'b' ou 'c').
+        str: A coluna da posicao ('a', 'b' ou 'c').
     """
     return posicao[0]
 
 def obter_pos_l(posicao: Tuple[str, str]) -> str:
-    """Devolve a linha correspondente a uma posição.
+    """Devolve a linha correspondente a uma posicao.
     Argumentos:
-        posicao (Tuple[str, str]): A posição a analisar.
+        posicao (Tuple[str, str]): A posi??o a analisar.
     Retorna:
-        str: A linha da posição ('1', '2' ou '3').
+        str: A linha da posicao ('1', '2' ou '3').
     """
     return posicao[1]
 
 def eh_posicao(arg) -> bool:
-    """Verifica se o argumento corresponde a uma posição válida do tabuleiro.
+    """Verifica se o argumento corresponde a uma posi??o v?lida do tabuleiro.
     Argumentos:
         arg: O valor a verificar.
     Retorna:
-        bool: True se for uma posição válida, False caso contrário.
+        bool: True se for uma posi??o valida, False, caso contrario.
     """
     return isinstance(arg, tuple) and len(arg) == 2 and arg[0] in colunas and arg[1] in linhas
 
 def posicoes_iguais(posicao1, posicao2) -> bool:
-    """Verifica se duas posições são exatamente iguais.
+    """Verifica se duas posicoes s?o exatamente iguais.
     Argumentos:
-        posicao1 (Tuple[str, str]): Primeira posição.
-        posicao2 (Tuple[str, str]): Segunda posição.
+        posicao1 (Tuple[str, str]): Primeira posicao.
+        posicao2 (Tuple[str, str]): Segunda posicao.
     Retorna:
-        bool: True se forem idênticas, False caso contrário.
+        bool: True se forem identicas, False, caso contrario.
     """
     return eh_posicao(posicao1) and eh_posicao(posicao2) and posicao1 == posicao2
 
 def posicao_para_str(posicao: Tuple[str, str]) -> str:
-    """Converte uma posição para a sua representação textual.
+    """Converte uma posicao para a sua representacao textual.
     Argumentos:
-        posicao (Tuple[str, str]): A posição a converter.
+        posicao (Tuple[str, str]): A posicao a converter.
     Retorna:
-        str: A representação em formato de texto (exemplo: 'a1').
+        str: A representacao em formato de texto (exemplo: 'a1').
     """
     return ''.join(posicao)
 
 def obter_posicoes_adjacentes(posicao: Tuple[str, str]) -> Tuple[Tuple[str, str], ...]:
-    """Devolve todas as posições diretamente adjacentes à posição indicada.
+    """Devolve todas as posi??es diretamente adjacentes a posicao indicada.
     Argumentos:
-        posicao (Tuple[str, str]): A posição de referência.
+        posicao (Tuple[str, str]): A posicao de referencia.
     Retorna:
-        Tuple[Tuple[str, str], ...]: Tuplo contendo as posições adjacentes, ordenadas.
+        Tuple[Tuple[str, str], ...]: Tuplo contendo as posicoes adjacentes, ordenadas.
     """
     adj_strs = adjacencias[posicao_para_str(posicao)]
     return tuple(sorted((cria_posicao(p[0], p[1]) for p in adj_strs), key=_indice_posicao_leitura))
@@ -156,60 +157,60 @@ def obter_posicoes_adjacentes(posicao: Tuple[str, str]) -> Tuple[Tuple[str, str]
 # TAD peca
 # -------------------------------------------------------------------------------------------------
 def cria_peca(entrada: str) -> str:
-    """Cria uma nova peça do jogo, garantindo que o símbolo é válido.
+    """Cria uma nova peca do jogo, garantindo que o s?mbolo e valido.
     Argumentos:
-        entrada (str): Carácter que identifica a peça ('X', 'O' ou ' ').
+        entrada (str): Car?cter que identifica a peca ('X', 'O' ou ' ').
     Retorna:
-        str: A peça criada.
-    Exceções:
-        ValueError: É lançada se o argumento não corresponder a uma peça válida.
+        str: A peca criada.
+    Exce??es:
+        ValueError: ? lan?ada se o argumento n?o corresponder a uma peca valida.
     """
     _validar_peca(entrada)
     return entrada
 
 def cria_copia_peca(peca: str) -> str:
-    """Cria uma cópia de uma peça existente.
+    """Cria uma copia de uma pe?a existente.
     Argumentos:
-        peca (str): A peça a copiar.
+        peca (str): A peca a copiar.
     Retorna:
-        str: A cópia da peça fornecida.
+        str: A copia da peca fornecida.
     """
     return peca
 
 def eh_peca(arg) -> bool:
-    """Verifica se o argumento corresponde a uma peça válida do jogo.
+    """Verifica se o argumento corresponde a uma pe?a valida do jogo.
     Argumentos:
         arg: O valor a verificar.
     Retorna:
-        bool: True se for uma peça válida ('X', 'O' ou ' '), False caso contrário.
+        bool: True se for uma pe?a v?lida ('X', 'O' ou ' '), False, caso contrario.
     """
     return isinstance(arg, str) and len(arg) == 1 and arg in ('X', 'O', ' ')
 
 def pecas_iguais(peca1: str, peca2: str) -> bool:
-    """Verifica se duas peças são iguais.
+    """Verifica se duas pecas s?o iguais.
     Argumentos:
-        peca1 (str): Primeira peça.
-        peca2 (str): Segunda peça.
+        peca1 (str): Primeira peca.
+        peca2 (str): Segunda peca.
     Retorna:
-        bool: True se forem idênticas, False caso contrário.
+        bool: True se forem identicas, False, caso contrario.
     """
     return eh_peca(peca1) and eh_peca(peca2) and peca1 == peca2
 
 def peca_para_str(peca: str) -> str:
-    """Converte uma peça para a sua representação textual.
+    """Converte uma pe?a para a sua representacao textual.
        Argumentos:
-           peca (str): A peça a converter.
+           peca (str): A peca a converter.
        Retorna:
-           str: Representação textual da peça (exemplo: '[X]').
+           str: Representacao textual da peca (exemplo: '[X]').
        """
     return f'[{peca}]'
 
 def peca_para_inteiro(peca: str) -> int:
-    """Converte uma peça para um valor numérico.
+    """Converte uma peca para um valor numerico.
     Argumentos:
-        peca (str): A peça a converter.
+        peca (str): A peca a converter.
     Retorna:
-        int: 1 para 'X', -1 para 'O', 0 para espaço vazio.
+        int: 1 para 'X', -1 para 'O', 0 para espaco vazio.
     """
     return {'X': 1, 'O': -1, ' ': 0}[peca]
 
@@ -219,49 +220,49 @@ def peca_para_inteiro(peca: str) -> int:
 def cria_tabuleiro() -> List[List[str]]:
     """Cria um tabuleiro vazio de 3x3 para o jogo.
      Retorna:
-         List[List[str]]: Tabuleiro inicial com todas as posições vazias.
+         List[List[str]]: Tabuleiro inicial com todas as posi??es vazias.
      """
     return [[' ' for _ in range(3)] for _ in range(3)]
 
 def cria_copia_tabuleiro(tabuleiro: List[List[str]]) -> List[List[str]]:
-    """Cria uma cópia independente de um tabuleiro existente.
+    """Cria uma copia independente de um tabuleiro existente.
     Argumentos:
         tabuleiro (List[List[str]]): Tabuleiro a copiar.
     Retorna:
-        List[List[str]]: Cópia do tabuleiro fornecido.
+        List[List[str]]: C?pia do tabuleiro fornecido.
     """
     return [row[:] for row in tabuleiro]
 
 
 def _indice(posicao: Tuple[str, str]) -> Tuple[int, int]:
-    """Converte uma posição em índices de linha e coluna.
+    """Converte uma posicao em indices de linha e coluna.
     Argumentos:
-        posicao (Tuple[str, str]): A posição a converter.
+        posicao (Tuple[str, str]): A posicao converter.
     Retorna:
-        Tuple[int, int]: Índices correspondentes (linha, coluna) no tabuleiro.
+        Tuple[int, int]: indices correspondentes (linha, coluna) no tabuleiro.
     """
     return int(posicao[1]) - 1, ord(posicao[0]) - ord('a')
 
 def obter_peca(tabuleiro: List[List[str]], posicao: Tuple[str, str]) -> str:
-    """Obtém a peça presente numa posição específica do tabuleiro.
+    """Obtem a peca presente numa posicao especifica do tabuleiro.
     Argumentos:
         tabuleiro (List[List[str]]): O tabuleiro.
-        posicao (Tuple[str, str]): Posição a consultar.
+        posicao (Tuple[str, str]): Posi??o a consultar.
     Retorna:
-        str: A peça presente na posição ('X', 'O' ou ' ').
+        str: A peca presente na posicao ('X', 'O' ou ' ').
     """
     r, c = _indice(posicao)
     return tabuleiro[r][c]
 
 def obter_vetor(tabuleiro: List[List[str]], seletor: str) -> Tuple[str, ...]:
-    """Obtém todas as peças de uma linha ou coluna do tabuleiro.
+    """Obtem todas as pecas de uma linha ou coluna do tabuleiro.
     Argumentos:
         tabuleiro (List[List[str]]): O tabuleiro.
-        seletor (str): Letra da coluna ou número da linha.
+        seletor (str): Letra da coluna ou numero da linha.
     Retorna:
-        Tuple[str, ...]: Tuplo de peças correspondentes.
-    Exceções:
-        ValueError: É lançada se o seletor for inválido.
+        Tuple[str, ...]: Tuplo de pecas correspondentes.
+    Exce??es:
+        ValueError: ? geradas se o seletor for invalido.
     """
     if seletor in colunas:
         c = ord(seletor) - ord('a')
@@ -272,23 +273,23 @@ def obter_vetor(tabuleiro: List[List[str]], seletor: str) -> Tuple[str, ...]:
     raise ValueError('obter_vetor: argumento invalido')
 
 def coloca_peca(tabuleiro: List[List[str]], peca: str, posicao: Tuple[str, str]) -> List[List[str]]:
-    """Coloca uma peça numa posição específica do tabuleiro.
+    """Coloca uma peca numa posicao especifica do tabuleiro.
     Argumentos:
         tabuleiro (List[List[str]]): O tabuleiro.
-        peca (str): Peça a colocar ('X' ou 'O').
-        posicao (Tuple[str, str]): Posição onde colocar a peça.
+        peca (str): Peca a colocar ('X' ou 'O').
+        posicao (Tuple[str, str]): Posicao onde colocar a peca.
     Retorna:
-        List[List[str]]: Tabuleiro atualizado.
+        List[List[str]]Tabuleiro atualizado.
     """
     r, c = _indice(posicao)
     tabuleiro[r][c] = peca
     return tabuleiro
 
 def remove_peca(tabuleiro: List[List[str]], posicao: Tuple[str, str]) -> List[List[str]]:
-    """Remove a peça de uma posição específica do tabuleiro.
+    """Remove a peca de uma posicao especifica do tabuleiro.
     Argumentos:
         tabuleiro (List[List[str]]): O tabuleiro.
-        posicao (Tuple[str, str]): Posição a limpar.
+        posicao (Tuple[str, str]): Posicao a limpar.
     Retorna:
         List[List[str]]: Tabuleiro atualizado.
     """
@@ -297,13 +298,13 @@ def remove_peca(tabuleiro: List[List[str]], posicao: Tuple[str, str]) -> List[Li
     return tabuleiro
 
 def move_peca(tabuleiro: List[List[str]], posicao_origem: Tuple[str, str], posicao_destino: Tuple[str, str]) -> List[List[str]]:
-    """Move uma peça de uma posição de origem para uma posição de destino.
+    """Move uma peca de uma posicao de origem para uma posi??o de destino.
         Argumentos:
             tabuleiro (List[List[str]]): O tabuleiro.
-            posicao_origem (Tuple[str, str]): Posição atual da peça.
-            posicao_destino (Tuple[str, str]): Nova posição da peça.
+            posicao_origem (Tuple[str, str]): Posicao atual da pe?a.
+            posicao_destino (Tuple[str, str]): Nova posicao da pe?a.
         Retorna:
-            List[List[str]]: Tabuleiro atualizado.
+            List[List[str]]:Tabuleiro atualizado.
         """
     peca = obter_peca(tabuleiro, posicao_origem)
     remove_peca(tabuleiro, posicao_origem)
@@ -311,16 +312,16 @@ def move_peca(tabuleiro: List[List[str]], posicao_origem: Tuple[str, str], posic
     return tabuleiro
 
 def eh_tabuleiro(arg) -> bool:
-    """Verifica se um argumento representa um tabuleiro válido do jogo.
+    """Verifica se um argumento representa um tabuleiro v?lido do jogo.
     Argumentos:
         arg: Valor a verificar.
     Retorna:
-        bool: True se o argumento for um tabuleiro válido, False caso contrário.
-              Um tabuleiro é válido se:
-                - for uma lista 3x3 de peças válidas,
-                - contiver no máximo 3 peças de cada jogador,
-                - a diferença de peças entre os jogadores não for superior a 1,
-                - não existirem simultaneamente vencedores.
+        bool: True se o argumento for um tabuleiro v?lido, False, caso contrario.
+              Um tabuleiro e valido se:
+                - for uma lista 3x3 de pecas validas,
+                - contiver no m?ximo 3 pecas de cada jogador,
+                - a diferenca de pecas entre os jogadores nao for superior a 1,
+                - nao existirem simultaneamente vencedores.
     """
     if not (isinstance(arg, list) and len(arg) == 3 and all(
             isinstance(r, list) and len(r) == 3 and all(eh_peca(p) for p in r) for r in arg)):
@@ -334,43 +335,43 @@ def eh_tabuleiro(arg) -> bool:
     return not (vencedor_x and vencedor_o)
 
 def eh_posicao_livre(tabuleiro: List[List[str]], posicao: Tuple[str, str]) -> bool:
-    """Verifica se uma posição no tabuleiro está livre (não ocupada).
+    """Verifica se uma posicao no tabuleiro esta livre (nao ocupada).
     Argumentos:
         tabuleiro (List[List[str]]): O tabuleiro.
-        posicao (Tuple[str, str]): Posição a verificar.
+        posicao (Tuple[str, str]): Posicao a verificar.
     Retorna:
-        bool: True se a posição estiver vazia, False caso contrário.
+        bool: True se a posicao estiver vazia, False, caso contr?rio.
     """
     return obter_peca(tabuleiro, posicao) == ' '
 
 def tabuleiros_iguais(tabuleiro1: List[List[str]], tabuleiro2: List[List[str]]) -> bool:
-    """Verifica se dois tabuleiros são idênticos.
+    """Verifica se dois tabuleiros sao identicos.
     Argumentos:
         tabuleiro1 (List[List[str]]): Primeiro tabuleiro.
         tabuleiro2 (List[List[str]]): Segundo tabuleiro.
     Retorna:
-        bool: True se ambos forem iguais, False caso contrário.
+        bool: True se ambos forem iguais, False caso contrario.
     """
     return tabuleiro1 == tabuleiro2
 
 def tabuleiro_para_str(tabuleiro: List[List[str]]) -> str:
-    """Converte um tabuleiro numa representação textual legível.
+    """Converte um tabuleiro numa representacao textual legivel.
       Argumentos:
           tabuleiro (List[List[str]]): O tabuleiro.
       Retorna:
-          str: Representação visual do tabuleiro, com linhas, colunas e conexões.
+          str: Representacao visual do tabuleiro, com linhas, colunas e conex?es.
       """
     linhas_tabuleiro = [f'{linhas[r]} ' + '-'.join(peca_para_str(tabuleiro[r][c]) for c in range(3)) for r in range(3)]
     return '\n'.join([cabecalho, linhas_tabuleiro[0], conexao1, linhas_tabuleiro[1], conexao2, linhas_tabuleiro[2]])
 
 def tuplo_para_tabuleiro(tuplo: Tuple[Tuple[int, ...], ...]) -> List[List[str]]:
-    """Converte um tuplo de inteiros para um tabuleiro de peças.
+    """Converte um tuplo de inteiros para um tabuleiro de pecas.
     Argumentos:
         tuplo (Tuple[Tuple[int, ...], ...]): Tuplo representando o tabuleiro (1=X, -1=O, 0=vazio).
     Retorna:
         List[List[str]]: Tabuleiro correspondente.
-    Exceções:
-        ValueError: Se o tuplo não estiver no formato correto.
+    Exce??es:
+        ValueError: Se o tuplo nao estiver no formato correto.
     """
     if not (isinstance(tuplo, tuple) and len(tuplo) == 3 and all(
             isinstance(l, tuple) and len(l) == 3 and all(v in (1, 0, -1) for v in l) for l in tuplo)):
@@ -389,7 +390,7 @@ def _tem_vencedor(tabuleiro: List[List[str]], jogador: str) -> bool:
         tabuleiro (List[List[str]]): O tabuleiro.
         jogador (str): Identificador do jogador ('X' ou 'O').
     Retorna:
-        bool: True se o jogador tiver vencido, False caso contrário.
+        bool: True se o jogador tiver vencido, False caso contrario.
     """
     for linha_vencedora in linhas_vencedoras:
         if all(obter_peca(tabuleiro, cria_posicao(colunas[c], linhas[r])) == jogador for r, c in linha_vencedora):
@@ -397,11 +398,11 @@ def _tem_vencedor(tabuleiro: List[List[str]], jogador: str) -> bool:
     return False
 
 def obter_ganhador(tabuleiro: List[List[str]]) -> str:
-    """Obtém o vencedor do jogo, caso exista.
+    """Obtem o vencedor do jogo, caso exista.
       Argumentos:
           tabuleiro (List[List[str]]): O tabuleiro atual.
       Retorna:
-          str: 'X' se X venceu, 'O' se O venceu, ' ' se não houver vencedor.
+          str: 'X' se X venceu, 'O' se O venceu, ' ' se n?o houver vencedor.
       """
     if _tem_vencedor(tabuleiro, 'X'):
         return 'X'
@@ -410,28 +411,28 @@ def obter_ganhador(tabuleiro: List[List[str]]) -> str:
     return ' '
 
 def obter_posicoes_livres(tabuleiro: List[List[str]]) -> Tuple[Tuple[str, str], ...]:
-    """Obtém todas as posições livres no tabuleiro.
+    """Obtem todas as posicoes livres no tabuleiro.
        Argumentos:
            tabuleiro (List[List[str]]): O tabuleiro.
        Retorna:
-           Tuple[Tuple[str, str], ...]: Tuplo com todas as posições não ocupadas.
+           Tuple[Tuple[str, str], ...]: Tuplo com todas as posicoes nao ocupadas.
        """
     return tuple(pos for pos in _todas_posicoes() if eh_posicao_livre(tabuleiro, pos))
 
 def obter_posicoes_jogador(tabuleiro: List[List[str]], jogador: str) -> Tuple[Tuple[str, str], ...]:
-    """Obtém todas as posições ocupadas por um jogador.
+    """Obtem todas as posicoes ocupadas por um jogador.
       Argumentos:
           tabuleiro (List[List[str]]): O tabuleiro.
           jogador (str): Identificador do jogador ('X' ou 'O').
       Retorna:
-          Tuple[Tuple[str, str], ...]: Tuplo com todas as posições do jogador.
+          Tuple[Tuple[str, str], ...]: Tuplo com todas as posicoes do jogador.
       """
     return tuple(pos for pos in _todas_posicoes() if obter_peca(tabuleiro, pos) == jogador)
 
 def _todas_posicoes() -> Tuple[Tuple[str, str], ...]:
-    """Obtém todas as posições possíveis no tabuleiro.
+    """Obtem todas as posicoes poss?veis no tabuleiro.
       Retorna:
-          Tuple[Tuple[str, str], ...]: Tuplo contendo todas as posições (3x3).
+          Tuple[Tuple[str, str], ...]: Tuplo contendo todas as posicoes (3x3).
       """
     return tuple(cria_posicao(c, l) for l in linhas for c in colunas)
 
@@ -439,13 +440,13 @@ def _todas_posicoes() -> Tuple[Tuple[str, str], ...]:
 # Funcoes adicionais
 # -------------------------------------------------------------------------------------------------
 def _analisar_entrada(entrada: str) -> Tuple[Tuple[str, str], ...]:
-    """Analisa a entrada do utilizador para obter posições de movimento ou colocação.
+    """Analisa a entrada do utilizador para obter posicoes de movimento ou colocacao.
     Argumentos:
         entrada (str): Entrada textual do utilizador (ex: 'a1' ou 'a1b2').
     Retorna:
-        Tuple[Tuple[str, str], ...]: Tuplo de posições interpretadas.
-    Exceções:
-        ValueError: Se a entrada não for válida.
+        Tuple[Tuple[str, str], ...]: Tuplo de posi??es interpretadas.
+    Excecoes:
+        ValueError: Se a entrada nao for valida.
     """
     if len(entrada) == 2:
         return (cria_posicao(entrada[0], entrada[1]),)
@@ -454,14 +455,14 @@ def _analisar_entrada(entrada: str) -> Tuple[Tuple[str, str], ...]:
     raise ValueError(erro_movimento_manual)
 
 def obter_movimento_manual(tabuleiro: List[List[str]], jogador: str) -> Tuple[Tuple[str, str], ...]:
-    """Obtém o movimento do jogador humano, validando a entrada.
+    """Obtem o movimento do jogador humano, validando a entrada.
     Argumentos:
         tabuleiro (List[List[str]]): Tabuleiro atual.
         jogador (str): Jogador atual ('X' ou 'O').
     Retorna:
-        Tuple[Tuple[str, str], ...]: Movimento escolhido (posição ou origem/destino).
-    Exceções:
-        ValueError: Se a escolha for inválida.
+        Tuple[Tuple[str, str], ...]: Movimento escolhido (posicao ou origem/destino).
+    Excecoes:
+        ValueError: Se a escolha for inv?lida.
     """
     import sys
     mensagem = 'Turno do jogador. Escolha uma ' + ('posicao' if _fase_colocacao(tabuleiro) else 'movimento') + ': '
@@ -483,22 +484,22 @@ def obter_movimento_manual(tabuleiro: List[List[str]], jogador: str) -> Tuple[Tu
     return movimento
 
 def _fase_colocacao(tabuleiro: List[List[str]]) -> bool:
-    """Determina se o jogo ainda se encontra na fase de colocação de peças.
+    """Determina se o jogo ainda se encontra na fase de colocacao de pecas.
     Argumentos:
         tabuleiro (List[List[str]]): O tabuleiro atual.
     Retorna:
-        bool: True se algum jogador ainda não colocou as 3 peças, False caso contrário.
+        bool: True se algum jogador ainda nao colocou as 3 pecas, False, caso contrario.
     """
     return len(obter_posicoes_jogador(tabuleiro, 'X')) < 3 or len(obter_posicoes_jogador(tabuleiro, 'O')) < 3
 
 def _encontrar_posicao(tabuleiro: List[List[str]], jogador: str, predicado) -> Optional[Tuple[str, str]]:
-    """Procura uma posição que satisfaça um predicado específico.
+    """Procura uma posicao que satisfaca um predicado especifico.
     Argumentos:
         tabuleiro (List[List[str]]): Tabuleiro atual.
-        jogador (str): Jogador que vai testar a posição.
-        predicado: Função que retorna True se a posição for desejável.
+        jogador (str): Jogador que vai testar a posicao.
+        predicado: Funcao que retorna True se a posicao for desejavel.
     Retorna:
-        Optional[Tuple[str, str]]: Posição encontrada ou None.
+        Optional[Tuple[str, str]]: Posicao encontrada ou None.
     """
     for pos in obter_posicoes_livres(tabuleiro):
         tab_copia = cria_copia_tabuleiro(tabuleiro)
@@ -508,32 +509,32 @@ def _encontrar_posicao(tabuleiro: List[List[str]], jogador: str, predicado) -> O
     return None
 
 def _posicao_vitoria(tabuleiro: List[List[str]], jogador: str) -> Optional[Tuple[str, str]]:
-    """Encontra uma posição que permita ao jogador ganhar imediatamente.
+    """Encontra uma posicao que permita ao jogador ganhar imediatamente.
     Argumentos:
         tabuleiro (List[List[str]]): Tabuleiro atual.
         jogador (str): Jogador a testar.
     Retorna:
-        Optional[Tuple[str, str]]: Posição de vitória ou None.
+        Optional[Tuple[str, str]]: Posicao de vitoria ou None.
     """
     return _encontrar_posicao(tabuleiro, jogador, lambda tc: obter_ganhador(tc) == jogador)
 
 
 def _posicao_bloqueio(tabuleiro: List[List[str]], jogador: str) -> Optional[Tuple[str, str]]:
-    """Encontra uma posição que bloqueie a vitória do adversário.
+    """Encontra uma posicao que bloqueie a vitoria do adversario.
        Argumentos:
            tabuleiro (List[List[str]]): Tabuleiro atual.
            jogador (str): Jogador a proteger.
        Retorna:
-           Optional[Tuple[str, str]]: Posição de bloqueio ou None.
+           Optional[Tuple[str, str]]: Posicao de bloqueio ou None.
        """
     return _posicao_vitoria(tabuleiro, _obter_adversario(jogador))
 
 def obter_movimento_auto(tabuleiro: List[List[str]], jogador: str, nivel: str) -> Tuple[Tuple[str, str], ...]:
-    """Calcula o movimento automático do computador com base no nível de dificuldade.
+    """Calcula o movimento automatico do computador com base no nivel de dificuldade.
     Argumentos:
         tabuleiro (List[List[str]]): Tabuleiro atual.
         jogador (str): Jogador do computador ('X' ou 'O').
-        nivel (str): Nível de dificuldade ('facil', 'normal', 'dificil').
+        nivel (str): N?vel de dificuldade ('facil', 'normal', 'dificil').
     Retorna:
         Tuple[Tuple[str, str], ...]: Movimento calculado.
     """
@@ -573,19 +574,19 @@ def _avaliar_tabuleiro(tabuleiro: List[List[str]]) -> int:
     Argumentos:
         tabuleiro (List[List[str]]): Tabuleiro atual.
     Retorna:
-        int: 1 se X venceu, -1 se O venceu, 0 caso contrário.
+        int: 1 se X venceu, -1 se O venceu, 0 caso contrario.
     """
     ganhador = obter_ganhador(tabuleiro)
     return 1 if ganhador == 'X' else -1 if ganhador == 'O' else 0
 
 def _ordenar_movimentos(tabuleiro: List[List[str]], jogador: str,movimentos: Tuple[Tuple[Tuple[str, str], Tuple[str, str]], ...]) -> Tuple[Tuple[Tuple[str, str], Tuple[str, str]], ...]:
-    """Ordena movimentos, priorizando aqueles que levam à vitória.
+    """Ordena movimentos, priorizando aqueles que levam a vitoria.
     Argumentos:
         tabuleiro (List[List[str]]): Tabuleiro atual.
         jogador (str): Jogador a analisar.
-        movimentos: Tuplo de movimentos possíveis (origem, destino).
+        movimentos: Tuplo de movimentos possiveis (origem, destino).
     Retorna:
-        Tuple: Movimentos ordenados com prioridade para vitória imediata.
+        Tuple: Movimentos ordenados com prioridade para vitoria imediata.
     """
     movs_ganho, movs_restantes = [], []
     for mov in movimentos:
@@ -606,7 +607,7 @@ def _minimax(tabuleiro: List[List[str]], jogador: str, profundidade: int, alpha:
         profundidade (int): Profundidade restante.
         alpha (int): Valor alpha para poda.
         beta (int): Valor beta para poda.
-        maximizando (bool): True se estiver a maximizar, False se a minimizar.
+        maximizando (bool): True se estiver a maximizar, False, se a minimizar.
     Retorna:
         Tuple[int, Optional[Tuple]]: (valor do tabuleiro, melhor movimento).
     """
@@ -635,14 +636,14 @@ def _minimax(tabuleiro: List[List[str]], jogador: str, profundidade: int, alpha:
     return melhor_valor, melhor_movimento
 
 def moinho(jogador_str: str, nivel_dificuldade: str) -> str:
-    """Função principal para jogar o jogo do Moinho.
+    """Funcao principal para jogar o jogo do Moinho.
     Argumentos:
-        jogador_str (str): Peça do jogador humano ('[X]' ou '[O]').
-        nivel_dificuldade (str): Nível de dificuldade do computador ('facil', 'normal', 'dificil').
+        jogador_str (str): Pe?a do jogador humano ('[X]' ou '[O]').
+        nivel_dificuldade (str): N?vel de dificuldade do computador ('facil', 'normal', 'dificil').
     Retorna:
-        str: Representação da peça vencedora ('[X]', '[O]').
-    Exceções:
-        ValueError: Se os argumentos forem inválidos.
+        str: Representa??o da pe?a vencedora ('[X]', '[O]').
+    Exce??es:
+        ValueError: Se os argumentos forem inv?lidos.
     """
     if jogador_str not in ('[X]', '[O]') or nivel_dificuldade not in ('facil', 'normal', 'dificil'):
         raise ValueError(erro_moinho)
