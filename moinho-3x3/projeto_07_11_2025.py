@@ -318,7 +318,7 @@ def eh_tabuleiro(arg) -> bool:
         bool: True se o argumento for um tabuleiro v?lido, False, caso contrario.
               Um tabuleiro e valido se:
                 - for uma lista 3x3 de pecas validas,
-                - contiver no m?ximo 3 pecas de cada jogador,
+                - contiver no moximo 3 pecas de cada jogador,
                 - a diferenca de pecas entre os jogadores nao for superior a 1,
                 - nao existirem simultaneamente vencedores.
     """
@@ -369,7 +369,7 @@ def tuplo_para_tabuleiro(tuplo: Tuple[Tuple[int, ...], ...]) -> List[List[str]]:
         tuplo (Tuple[Tuple[int, ...], ...]): Tuplo representando o tabuleiro (1=X, -1=O, 0=vazio).
     Retorna:
         List[List[str]]: Tabuleiro correspondente.
-    Exce??es:
+    Excecoes:
         ValueError: Se o tuplo nao estiver no formato correto.
     """
     if not (isinstance(tuplo, tuple) and len(tuplo) == 3 and all(
