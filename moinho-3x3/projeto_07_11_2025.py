@@ -5,10 +5,10 @@ from functools import reduce
 # -------------------------------------------------------------------------------------------------
 colunas = ('a', 'b', 'c')
 linhas = ('1', '2', '3')
-erro_posicao = 'cria_posicao: argumentos inválidos'
-erro_peca = 'cria_peca: argumento inválido'
-erro_movimento_manual = 'obter_movimento_manual: escolha inválida'
-erro_moinho = 'moinho: argumentos inválidos'
+erro_posicao = 'cria_posicao: argumentos invalidos'
+erro_peca = 'cria_peca: argumento invalido'
+erro_movimento_manual = 'obter_movimento_manual: escolha invalida'
+erro_moinho = 'moinho: argumentos invalidos'
 
 # ASCII do tabuleiro
 cabecalho = '   a   b   c'
