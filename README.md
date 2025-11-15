@@ -15,7 +15,7 @@ Esta implementação segue um conjunto de regras específico para a variante 3x3
 * **Vitória:** O vencedor é o primeiro jogador a conseguir alinhar as suas três peças numa linha **horizontal ou vertical**. Alinhamentos diagonais não contam como vitória.
 * **Fase 1: Colocação:** O jogo começa com o tabuleiro inicialmente vazio. Os jogadores colocam, alternadamente, uma das suas três peças numa casa vazia. O jogo pode terminar nesta fase se um jogador conseguir a vitória.
 * **Fase 2: Movimento:** Após todas as 6 peças (3 de 'X' e 3 de 'O') estarem no tabuleiro e não houver vencedor, começa a fase de movimento. Em cada turno, o jogador pode movimentar uma das suas peças para um espaço livre imediatamente adjacente (ligado por linha horizontal, vertical ou diagonal).
-* **Bloqueio (Passar):** Se um jogador não tiver nenhum movimento legal (porque todas as suas peças estão bloqueadas), ele pode "passar" o turno. No código, isto é representado por um movimento da peça para a sua própria posição (ex: 'a1a1').
+* **Bloqueio (Passar):** Se um jogador não tiver nenhum movimento possível (porque todas as suas peças estão bloqueadas), ele pode "passar" o turno. No código, isto é representado por um movimento da peça para a sua própria posição (ex: 'a1a1').
 
 ---
 
