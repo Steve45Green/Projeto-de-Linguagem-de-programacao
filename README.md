@@ -109,7 +109,7 @@ O Minimax é o cérebro da IA de nível 'difícil'. A lógica está dividida par
 ## Como Executar o Jogo
 
 1.  Certifique-se de que tem o Python 3 instalado.
-2.  Guarde o código como `projeto.py` (ou o nome que o professor exigir).
+2.  Guarde o código como `projeto.py` .
 3.  Execute o ficheiro a partir do terminal:
     ```bash
     python3 projeto.py
