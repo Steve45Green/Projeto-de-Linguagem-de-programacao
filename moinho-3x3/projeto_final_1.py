@@ -1,6 +1,6 @@
 """
 Projeto: Jogo do Moinho (variante 3x3, 3 pecas por jogador)
-Autor: <Jose Ameixa n-18881 Diogo Vaz n-21132 Pedro Duarte n-21190>
+Autor: <Jose Ameixa | Diogo Vaz | Pedro Duarte >
 - Vence quem alinhar 3 pecas na HORIZONTAL ou VERTICAL (diagonais NAO contam).
 - O centro ('b2') liga tambem, em diagonal, a todos os cantos.
 - Fase 1 (colocacao): ate existirem 3 X e 3 O no tabuleiro.
@@ -1186,3 +1186,4 @@ def moinho(jogador: str, nivel: str) -> str:
         turno = outro_jogador(turno)
 
     return peca_para_str(obter_ganhador(tabuleiro))
+
