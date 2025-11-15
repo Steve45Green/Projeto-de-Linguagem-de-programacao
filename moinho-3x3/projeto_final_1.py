@@ -109,7 +109,6 @@ def outro_jogador(jogador: str) -> str:
     """
     return 'O' if jogador == 'X' else 'X'
 
-
 # -------------------------------------------------------------------------------------------------
 # TAD posicao
 # -------------------------------------------------------------------------------------------------
@@ -131,7 +130,6 @@ def cria_posicao(coluna: str, linha: str) -> tuple:
     confirmar_posicao(coluna, linha)
     return coluna, linha
 
-
 def cria_copia_posicao(posicao: tuple) -> tuple:
     """
     Cria uma copia de uma posicao (TAD).
@@ -143,7 +141,6 @@ def cria_copia_posicao(posicao: tuple) -> tuple:
         tuple: Uma nova instancia do TAD posicao.
     """
     return posicao[0], posicao[1]
-
 
 def obter_pos_c(posicao: tuple) -> str:
     """
@@ -170,7 +167,6 @@ def obter_pos_l(posicao: tuple) -> str:
     """
     return posicao[1]
 
-
 def eh_posicao(arg) -> bool:
     """
     Reconhecedor do TAD posicao. Verifica se o argumento e um TAD posicao valido.
@@ -188,7 +184,6 @@ def eh_posicao(arg) -> bool:
             arg[1] in LINHAS
     )
 
-
 def posicoes_iguais(posicao_1, posicao_2) -> bool:
     """
     Testa se dois argumentos sao TADs posicao e se sao iguais.
@@ -202,7 +197,6 @@ def posicoes_iguais(posicao_1, posicao_2) -> bool:
     """
     return eh_posicao(posicao_1) and eh_posicao(posicao_2) and posicao_1 == posicao_2
 
-
 def posicao_para_str(posicao: tuple) -> str:
     """
     Transformador: Converte o TAD posicao para a sua representacao externa (string).
@@ -214,7 +208,6 @@ def posicao_para_str(posicao: tuple) -> str:
         str: A representacao em string (ex: 'a1').
     """
     return posicao[0] + posicao[1]
-
 
 # -----------------------------------------------------------------------------------------------
 # (2) Parsers de strings para posicao e movimento
@@ -237,7 +230,6 @@ def str_para_posicao(entrada: str) -> tuple:
         return cria_posicao(entrada[0], entrada[1])
     raise ValueError(ERRO_JOGADA_MANUAL)
 
-
 def str_para_movimento(entrada: str) -> tuple:
     """
     Converte uma string (ex: 'a1a2') num tuplo de TADs posicao (origem, destino).
@@ -256,7 +248,6 @@ def str_para_movimento(entrada: str) -> tuple:
         return cria_posicao(entrada[0], entrada[1]), cria_posicao(entrada[2], entrada[3])
     raise ValueError(ERRO_JOGADA_MANUAL)
 
-
 # -------------------------------------------------------------------------------------------------
 # (4) TAD movimento (construtores e predicados)
 # -------------------------------------------------------------------------------------------------
@@ -264,33 +255,27 @@ def cria_mov_colocacao(posicao: tuple) -> tuple:
     """Cria um movimento de colocacao (tuplo com 1 elemento)."""
     return (posicao,)
 
-
 def cria_mov_passar(posicao: tuple) -> tuple:
     """Cria um movimento de passagem (origem e destino iguais)."""
     return posicao, posicao
-
 
 def cria_movimento(pos_origem: tuple, pos_destino: tuple) -> tuple:
     """Cria um movimento real (origem e destino diferentes)."""
     return pos_origem, pos_destino
 
-
 def eh_colocacao(movimento: tuple) -> bool:
     """Testa se um movimento e do tipo colocacao."""
     return len(movimento) == 1
-
 
 def eh_passar(movimento: tuple) -> bool:
     """Testa se um movimento e do tipo passagem."""
     return len(movimento) == 2 and posicoes_iguais(movimento[0], movimento[1])
 
-
 def eh_mov_real(movimento: tuple) -> bool:
     """Testa se um movimento e um movimento real (nao e passagem)."""
     return len(movimento) == 2 and not posicoes_iguais(movimento[0], movimento[1])
 
-
-# --- Logica de Adjacencia (Corrigida) ---
+# --- Logica de Adjacencia ---
 _LIGACOES = {
     'a1': ('b1', 'a2', 'b2'),
     'b1': ('a1', 'c1', 'b2'),
@@ -309,12 +294,10 @@ _ORDEM_LEITURA_MAP = {
     'a3': 6, 'b3': 7, 'c3': 8
 }
 
-
 def _chave_ordem_leitura(pos: tuple) -> int:
     """Funcao auxiliar usada como 'key' para ordenar posicoes pela ordem de leitura."""
     return _ORDEM_LEITURA_MAP[posicao_para_str(pos)]
-
-
+  
 def obter_posicoes_adjacentes(posicao: tuple) -> tuple:
     """
     Devolve um tuplo com as posicoes adjacentes a 'posicao', ordenadas
@@ -344,8 +327,6 @@ def obter_posicoes_adjacentes(posicao: tuple) -> tuple:
     lista_pos_adjacentes.sort(key=_chave_ordem_leitura)
 
     return tuple(lista_pos_adjacentes)
-
-
 # -------------------------------------------------------------------------------------------------
 # TAD peca
 # -------------------------------------------------------------------------------------------------
@@ -366,7 +347,6 @@ def cria_peca(entrada: str) -> str:
     confirmar_peca(entrada)
     return entrada
 
-
 def cria_copia_peca(peca: str) -> str:
     """
     Cria uma copia de uma peca (TAD).
@@ -379,7 +359,6 @@ def cria_copia_peca(peca: str) -> str:
     """
     return peca
 
-
 def eh_peca(arg) -> bool:
     """
     Reconhecedor do TAD peca. Verifica se o argumento e um TAD peca valido.
@@ -391,7 +370,6 @@ def eh_peca(arg) -> bool:
         bool: True se 'arg' for um TAD peca valido, False caso contrario.
     """
     return isinstance(arg, str) and len(arg) == 1 and arg in ('X', 'O', ' ')
-
 
 def pecas_iguais(peca1, peca2) -> bool:
     """
@@ -406,7 +384,6 @@ def pecas_iguais(peca1, peca2) -> bool:
     """
     return eh_peca(peca1) and eh_peca(peca2) and peca1 == peca2
 
-
 def peca_para_str(peca: str) -> str:
     """
     Transformador: Converte o TAD peca para a sua representacao externa (string).
@@ -418,7 +395,6 @@ def peca_para_str(peca: str) -> str:
         str: A representacao em string (ex: '[X]').
     """
     return f'[{peca}]'
-
 
 def peca_para_inteiro(peca: str) -> int:
     """
@@ -432,7 +408,6 @@ def peca_para_inteiro(peca: str) -> int:
     """
     return 1 if peca == 'X' else (-1 if peca == 'O' else 0)
 
-
 # -------------------------------------------------------------------------------------------------
 # TAD tabuleiro
 # -------------------------------------------------------------------------------------------------
@@ -444,7 +419,6 @@ def cria_tabuleiro() -> list:
         list: Um tabuleiro 3x3 (lista de listas) vazio.
     """
     return [[cria_peca(' ') for _ in COLUNAS] for _ in LINHAS]
-
 
 def cria_copia_tabuleiro(tabuleiro: list) -> list:
     """
@@ -458,11 +432,9 @@ def cria_copia_tabuleiro(tabuleiro: list) -> list:
     """
     return [linha[:] for linha in tabuleiro]
 
-
 def _idx_from_pos(posicao: tuple) -> tuple:
     """Converte um TAD posicao em indices de matriz (linha, coluna)."""
     return LINHAS.index(obter_pos_l(posicao)), COLUNAS.index(obter_pos_c(posicao))
-
 
 def obter_peca(tabuleiro: list, posicao: tuple) -> str:
     """
@@ -477,7 +449,6 @@ def obter_peca(tabuleiro: list, posicao: tuple) -> str:
     """
     r, c = _idx_from_pos(posicao)
     return tabuleiro[r][c]
-
 
 def obter_vetor(tabuleiro: list, entrada: str) -> tuple:
     """
@@ -498,7 +469,6 @@ def obter_vetor(tabuleiro: list, entrada: str) -> tuple:
         return tuple(tabuleiro[r][c] for c in range(3))
     else:
         raise ValueError("obter_vetor: seletor invalido (use 'a'..'c' ou '1'..'3')")
-
 
 def coloca_peca(tabuleiro: list, jogador: str, posicao: tuple) -> list:
     """
@@ -523,7 +493,6 @@ def coloca_peca(tabuleiro: list, jogador: str, posicao: tuple) -> list:
     tabuleiro[r][c] = jogador
     return tabuleiro
 
-
 def remove_peca(tabuleiro: list, posicao: tuple) -> list:
     """
     Modificador: Remove uma peca de uma posicao (coloca ' ').
@@ -539,7 +508,6 @@ def remove_peca(tabuleiro: list, posicao: tuple) -> list:
     r, c = _idx_from_pos(posicao)
     tabuleiro[r][c] = ' '
     return tabuleiro
-
 
 def move_peca(tabuleiro: list, p_origem: tuple, p_destino: tuple) -> list:
     """
@@ -567,14 +535,12 @@ def move_peca(tabuleiro: list, p_origem: tuple, p_destino: tuple) -> list:
     coloca_peca(tabuleiro, jogador, p_destino)
     return tabuleiro
 
-
 def _tem_vencedor(tabuleiro: list, jogador: str) -> bool:
     """Verifica se um jogador tem uma linha vitoriosa (horizontal ou vertical)."""
     for (a, b, c) in LINHAS_VENCEDORAS:
         if tabuleiro[a[0]][a[1]] == jogador and tabuleiro[b[0]][b[1]] == jogador and tabuleiro[c[0]][c[1]] == jogador:
             return True
     return False
-
 
 def eh_tabuleiro(arg) -> bool:
     """
@@ -600,7 +566,6 @@ def eh_tabuleiro(arg) -> bool:
         return False
     return True
 
-
 def eh_posicao_livre(tabuleiro: list, posicao: tuple) -> bool:
     """
     Testa se uma posicao especifica no tabuleiro esta livre (' ').
@@ -613,7 +578,6 @@ def eh_posicao_livre(tabuleiro: list, posicao: tuple) -> bool:
         bool: True se a posicao estiver livre, False caso contrario.
     """
     return obter_peca(tabuleiro, posicao) == ' '
-
 
 def tabuleiros_iguais(tabuleiro_1, tabuleiro_2) -> bool:
     """
@@ -630,10 +594,9 @@ def tabuleiros_iguais(tabuleiro_1, tabuleiro_2) -> bool:
         return False
     return all(tabuleiro_1[r][c] == tabuleiro_2[r][c] for r in range(3) for c in range(3))
 
-
 def tabuleiro_para_str(tabuleiro: list) -> str:
     """
-    Transformador: Converte o TAD tabuleiro para a sua representacao externa (ASCII art).
+    Transformador: Converte o TAD tabuleiro para a sua representacao externa.
 
     Args:
         tabuleiro (list): O TAD tabuleiro.
@@ -682,7 +645,6 @@ def tuplo_para_tabuleiro(tuplo_3x3: tuple) -> list:
             tabuleiro[r][c] = jogador
     return tabuleiro
 
-
 def obter_ganhador(tabuleiro: list) -> str:
     """
     Funcao de alto nivel: Verifica se ha um ganhador no tabuleiro.
@@ -698,7 +660,6 @@ def obter_ganhador(tabuleiro: list) -> str:
     if _tem_vencedor(tabuleiro, 'O'):
         return 'O'
     return ' '
-
 
 # -------------------------------------------------------------------------------------------------
 # Funcoes auxiliares (ordem de leitura)
@@ -722,7 +683,6 @@ def obter_posicoes_livres(tabuleiro: list) -> tuple:
     """
     return tuple(pos for pos in _iterador_posicoes_leitura() if eh_posicao_livre(tabuleiro, pos))
 
-
 def obter_posicoes_jogador(tabuleiro: list, jogador: str) -> tuple:
     """
     Funcao de alto nivel: Devolve as posicoes ocupadas por um jogador,
@@ -737,11 +697,9 @@ def obter_posicoes_jogador(tabuleiro: list, jogador: str) -> tuple:
     """
     return tuple(pos for pos in _iterador_posicoes_leitura() if obter_peca(tabuleiro, pos) == jogador)
 
-
 def _contar_pecas(tabuleiro: list) -> int:
     """Conta o numero total de pecas ('X' e 'O') no tabuleiro."""
     return sum(1 for pos in _iterador_posicoes_leitura() if obter_peca(tabuleiro, pos) != ' ')
-
 
 def _esta_na_fase_colocacao(tabuleiro: list) -> bool:
     """
@@ -759,7 +717,6 @@ def _esta_na_fase_colocacao(tabuleiro: list) -> bool:
 def _posicoes_adjacentes_livres(tabuleiro: list, posicao: tuple) -> tuple:
     """Devolve um tuplo de posicoes adjacentes a 'posicao' que estao livres."""
     return tuple(p for p in obter_posicoes_adjacentes(posicao) if eh_posicao_livre(tabuleiro, p))
-
 
 def _gerar_movimentos_validos(tabuleiro: list, jogador: str) -> tuple:
     """
@@ -784,14 +741,12 @@ def _gerar_movimentos_validos(tabuleiro: list, jogador: str) -> tuple:
             jogadas.append((posicoes_do_jogador[0], posicoes_do_jogador[0]))  # passar
     return tuple(jogadas)
 
-
 # -----------------------------------------------------------------------------------------------
 # (3) Regra de "passar"
 # -----------------------------------------------------------------------------------------------
 def _verifica_se_pode_passar(tabuleiro: list, jogador: str) -> bool:
     """Verifica se o jogador esta totalmente bloqueado e, portanto, pode passar."""
     return not any(not posicoes_iguais(a, b) for (a, b) in _gerar_movimentos_validos(tabuleiro, jogador))
-
 
 def jogada_valida(tabuleiro: list, jogador: str, p_origem: tuple, p_destino: tuple) -> bool:
     """
@@ -814,7 +769,6 @@ def jogada_valida(tabuleiro: list, jogador: str, p_origem: tuple, p_destino: tup
     if posicoes_iguais(p_origem, p_destino):
         return tem_propria and _verifica_se_pode_passar(tabuleiro, jogador)
     return (tem_propria and p_destino in obter_posicoes_adjacentes(p_origem) and eh_posicao_livre(tabuleiro, p_destino))
-
 
 # -------------------------------------------------------------------------------------------------
 # I/O: obter_movimento_manual
@@ -860,7 +814,6 @@ def obter_movimento_manual(tabuleiro: list, jogador: str) -> tuple:
         return p_origem, p_destino
     raise ValueError(ERRO_JOGADA_MANUAL)
 
-
 # -------------------------------------------------------------------------------------------------
 # AI: colocacao
 # -------------------------------------------------------------------------------------------------
@@ -869,12 +822,10 @@ def _obter_posicoes_canto() -> tuple:
     return (cria_posicao('a', '1'), cria_posicao('c', '1'),
             cria_posicao('a', '3'), cria_posicao('c', '3'))
 
-
 def _obter_posicoes_laterais() -> tuple:
     """Devolve um tuplo fixo com os TADs posicao das 4 laterais."""
     return (cria_posicao('b', '1'), cria_posicao('a', '2'),
             cria_posicao('c', '2'), cria_posicao('b', '3'))
-
 
 def _encontrar_vitoria_colocacao(tabuleiro: list, jogador: str):
     """Encontra a primeira posicao livre (ordem de leitura) que resulta
@@ -886,13 +837,11 @@ def _encontrar_vitoria_colocacao(tabuleiro: list, jogador: str):
             return pos
     return None
 
-
 def _encontrar_bloqueio_colocacao(tabuleiro: list, jogador: str):
     """Encontra a primeira posicao livre que bloqueia uma vitoria
     imediata do adversario."""
     adversario = outro_jogador(jogador)
     return _encontrar_vitoria_colocacao(tabuleiro, adversario)
-
 
 # -------- Heuristica (nao usada, mas mantida por demonstracao) -------------------------------
 def _existe_2_em_linha(tabuleiro: list, jogador: str) -> bool:
@@ -903,7 +852,6 @@ def _existe_2_em_linha(tabuleiro: list, jogador: str) -> bool:
         if linha.count(jogador) == 2 and linha.count(' ') == 1 and linha.count(adversario) == 0:
             return True
     return False
-
 
 def _posicao_2_em_linha_segura(tabuleiro: list, jogador: str):
     """(HEURISTICA EXTRA, NAO USADA) Encontra uma posicao que cria 2-em-linha
@@ -917,9 +865,7 @@ def _posicao_2_em_linha_segura(tabuleiro: list, jogador: str):
                 return pos
     return None
 
-
 # -------------------------------------------------------------------------------------------------
-
 def _escolher_colocacao_ia(tabuleiro: list, jogador: str) -> tuple:
     """
     Calcula a jogada da IA para a fase de colocacao, seguindo a estrategia
@@ -963,7 +909,6 @@ def _escolher_colocacao_ia(tabuleiro: list, jogador: str) -> tuple:
     livres = obter_posicoes_livres(tabuleiro)
     return (livres[0],) if livres else (cria_posicao('a', '1'),)
 
-
 # -------------------------------------------------------------------------------------------------
 # AI: movimento (facil/normal/dificil)
 # -------------------------------------------------------------------------------------------------
@@ -986,9 +931,7 @@ def _calcular_movimento_facil(tabuleiro: list, jogador: str) -> tuple:
                 return pos, adj
     # Se bloqueado, passa (primeira peca)
     posicoes_do_jogador = obter_posicoes_jogador(tabuleiro, jogador)
-    return (posicoes_do_jogador[0], posicoes_do_jogador[0]) if posicoes_do_jogador else (cria_posicao('a', '1'),
-                                                                                         cria_posicao('a', '1'))
-
+    return (posicoes_do_jogador[0], posicoes_do_jogador[0]) if posicoes_do_jogador else (cria_posicao('a', '1'),cria_posicao('a', '1'))
 
 def _encontrar_vitoria_movimento(tabuleiro: list, jogador: str):
     """
@@ -1010,7 +953,6 @@ def _encontrar_vitoria_movimento(tabuleiro: list, jogador: str):
         if obter_ganhador(t_sim) == jogador:
             return pos_origem, pos_destino
     return None
-
 
 def obter_movimento_auto(tabuleiro: list, jogador: str, nivel: str) -> tuple:
     """
@@ -1047,12 +989,10 @@ def obter_movimento_auto(tabuleiro: list, jogador: str, nivel: str) -> tuple:
 
     raise ValueError("obter_movimento_auto: nivel invalido")
 
-
 # -------------------------------------------------------------------------------------------------
 # Minimax (fase de movimento) com filtragem de ramos alpha-beta
-# (Refatorado para funcoes privadas separadas)
+# (Refatorado para funcoes privadas separada
 # -------------------------------------------------------------------------------------------------
-
 def _minimax_avaliacao(tabuleiro: list) -> int:
     """
     Avalia um estado final do tabuleiro para o Minimax.
@@ -1070,7 +1010,6 @@ def _minimax_avaliacao(tabuleiro: list) -> int:
     if ganhador == 'O':
         return -1
     return 0
-
 
 def _minimax_ordenar_movs(tabuleiro: list, jogador: str, movimentos: tuple) -> tuple:
     """
@@ -1095,7 +1034,6 @@ def _minimax_ordenar_movs(tabuleiro: list, jogador: str, movimentos: tuple) -> t
         else:
             restantes.append((pos_origem, pos_destino))
     return tuple(ganhos + restantes)
-
 
 def _minimax_recursivo(tabuleiro: list, jogador: str, depth: int, alpha: int, beta: int) -> tuple:
     """
@@ -1160,7 +1098,6 @@ def _minimax_recursivo(tabuleiro: list, jogador: str, depth: int, alpha: int, be
             if alpha >= beta:
                 break  # Corte Alpha
         return melhor_resultado, melhor_movimento
-
 
 def _algoritmo_minimax(tabuleiro: list, jogador_atual: str, max_depth: int = 5) -> tuple:
     """
