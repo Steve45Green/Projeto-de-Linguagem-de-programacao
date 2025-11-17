@@ -60,7 +60,6 @@ LINHAS_VENCEDORAS = (
     ((0, 2), (1, 2), (2, 2)),
 )
 
-
 # -------------------------------------------------------------------------------------------------
 # Utilitarios de validacao
 # -------------------------------------------------------------------------------------------------
@@ -81,7 +80,6 @@ def confirmar_posicao(coluna: str, linha: str) -> None:
     if coluna not in COLUNAS or linha not in LINHAS:
         raise ValueError(ERRO_POSICAO)
 
-
 def confirmar_peca(entrada: str) -> None:
     """
     Valida se a string de entrada corresponde a um simbolo de peca valido.
@@ -95,7 +93,6 @@ def confirmar_peca(entrada: str) -> None:
     """
     if not (isinstance(entrada, str) and len(entrada) == 1 and entrada in ('X', 'O', ' ')):
         raise ValueError(ERRO_PECA)
-
 
 def outro_jogador(jogador: str) -> str:
     """
@@ -1186,4 +1183,5 @@ def moinho(jogador: str, nivel: str) -> str:
         turno = outro_jogador(turno)
 
     return peca_para_str(obter_ganhador(tabuleiro))
+
 
