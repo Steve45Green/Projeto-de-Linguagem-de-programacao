@@ -39,7 +39,7 @@ import sys
 COLUNAS = ('a', 'b', 'c')
 LINHAS = ('1', '2', '3')
 
-# --- Mensagens de Erro (Exigidas pelo Enunciado) ---
+# --- Mensagens de Erro  ---
 ERRO_POSICAO = 'cria_posicao: argumentos invalidos'
 ERRO_PECA = 'cria_peca: argumento invalido'
 ERRO_JOGADA_MANUAL = 'obter_movimento_manual: escolha invalida'
@@ -1183,5 +1183,6 @@ def moinho(jogador: str, nivel: str) -> str:
         turno = outro_jogador(turno)
 
     return peca_para_str(obter_ganhador(tabuleiro))
+
 
 
