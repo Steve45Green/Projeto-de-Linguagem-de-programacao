@@ -119,6 +119,6 @@ O Minimax é o cérebro da IA de nível 'difícil'. A lógica está dividida par
 
 ## Autores
 
-* José Ameixa (nº 18881)
-* Diogo Vaz (nº 21132)
-* Pedro Duarte (nº 21190)
+* José Ameixa 
+* Diogo Vaz 
+* Pedro Duarte
